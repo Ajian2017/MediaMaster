@@ -1,0 +1,6 @@
+framework module Pods_MediaMaster {
+  umbrella header "Pods-MediaMaster-umbrella.h"
+
+  export *
+  module * { export * }
+}

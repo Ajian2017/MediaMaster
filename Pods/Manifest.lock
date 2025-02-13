@@ -1,0 +1,16 @@
+PODS:
+  - ffmpeg-kit-ios-min (6.0)
+
+DEPENDENCIES:
+  - ffmpeg-kit-ios-min
+
+SPEC REPOS:
+  trunk:
+    - ffmpeg-kit-ios-min
+
+SPEC CHECKSUMS:
+  ffmpeg-kit-ios-min: 4e9a088f4ee9629435960b9d68e54848975f1931
+
+PODFILE CHECKSUM: af9d0a9160d6dda055c24b72a716f85a680b19f6
+
+COCOAPODS: 1.15.2

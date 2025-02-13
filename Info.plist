@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- 其他已有配置 -->
+    
+    <!-- 添加以下权限描述 -->
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>需要访问相册以保存合并后的视频</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>需要访问相册以选择和保存视频</string>
+</dict>
+</plist> 
