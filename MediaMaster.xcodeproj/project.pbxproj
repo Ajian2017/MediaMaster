@@ -9,9 +9,16 @@
 /* Begin PBXBuildFile section */
 		AA4535B048A19608143DD2C8 /* Pods_MediaMaster.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B79D3D3C7D587EFA9798F2E4 /* Pods_MediaMaster.framework */; };
 		D1AA33B32D5D9D68006219EC /* MediaMasterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AA33B22D5D9D68006219EC /* MediaMasterApp.swift */; };
-		D1AA33B52D5D9D68006219EC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AA33B42D5D9D68006219EC /* ContentView.swift */; };
 		D1AA33B72D5D9D69006219EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D1AA33B62D5D9D69006219EC /* Assets.xcassets */; };
 		D1AA33BA2D5D9D69006219EC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D1AA33B92D5D9D69006219EC /* Preview Assets.xcassets */; };
+		D1AA33CC2D5E597B006219EC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AA33C62D5E597B006219EC /* ContentView.swift */; };
+		D1AA33CD2D5E597B006219EC /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AA33C72D5E597B006219EC /* VideoPlayerView.swift */; };
+		D1AA33CE2D5E597B006219EC /* VideoMergerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AA33C92D5E597B006219EC /* VideoMergerViewModel.swift */; };
+		D1AA33CF2D5E597B006219EC /* VideoPlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AA33CA2D5E597B006219EC /* VideoPlayerViewModel.swift */; };
+		D1AA33D22D5E59DE006219EC /* PhotoLibraryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AA33D02D5E59DE006219EC /* PhotoLibraryManager.swift */; };
+		D1AA33D62D5E5AC3006219EC /* ModePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AA33D32D5E5AC3006219EC /* ModePicker.swift */; };
+		D1AA33D72D5E5AC3006219EC /* VideoModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AA33D42D5E5AC3006219EC /* VideoModeView.swift */; };
+		D1AA33D82D5E5AC3006219EC /* PhotoModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AA33D52D5E5AC3006219EC /* PhotoModeView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,9 +26,16 @@
 		B79D3D3C7D587EFA9798F2E4 /* Pods_MediaMaster.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MediaMaster.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1AA33AF2D5D9D68006219EC /* MediaMaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MediaMaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1AA33B22D5D9D68006219EC /* MediaMasterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaMasterApp.swift; sourceTree = "<group>"; };
-		D1AA33B42D5D9D68006219EC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D1AA33B62D5D9D69006219EC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D1AA33B92D5D9D69006219EC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		D1AA33C62D5E597B006219EC /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		D1AA33C72D5E597B006219EC /* VideoPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayerView.swift; sourceTree = "<group>"; };
+		D1AA33C92D5E597B006219EC /* VideoMergerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoMergerViewModel.swift; sourceTree = "<group>"; };
+		D1AA33CA2D5E597B006219EC /* VideoPlayerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayerViewModel.swift; sourceTree = "<group>"; };
+		D1AA33D02D5E59DE006219EC /* PhotoLibraryManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoLibraryManager.swift; sourceTree = "<group>"; };
+		D1AA33D32D5E5AC3006219EC /* ModePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModePicker.swift; sourceTree = "<group>"; };
+		D1AA33D42D5E5AC3006219EC /* VideoModeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoModeView.swift; sourceTree = "<group>"; };
+		D1AA33D52D5E5AC3006219EC /* PhotoModeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoModeView.swift; sourceTree = "<group>"; };
 		F58F323B8E79F76C8264B921 /* Pods-MediaMaster.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MediaMaster.debug.xcconfig"; path = "Target Support Files/Pods-MediaMaster/Pods-MediaMaster.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -75,8 +89,10 @@
 		D1AA33B12D5D9D68006219EC /* MediaMaster */ = {
 			isa = PBXGroup;
 			children = (
+				D1AA33D12D5E59DE006219EC /* Managers */,
+				D1AA33CB2D5E597B006219EC /* ViewModels */,
+				D1AA33C82D5E597B006219EC /* Views */,
 				D1AA33B22D5D9D68006219EC /* MediaMasterApp.swift */,
-				D1AA33B42D5D9D68006219EC /* ContentView.swift */,
 				D1AA33B62D5D9D69006219EC /* Assets.xcassets */,
 				D1AA33B82D5D9D69006219EC /* Preview Content */,
 			);
@@ -89,6 +105,35 @@
 				D1AA33B92D5D9D69006219EC /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		D1AA33C82D5E597B006219EC /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D1AA33D32D5E5AC3006219EC /* ModePicker.swift */,
+				D1AA33D52D5E5AC3006219EC /* PhotoModeView.swift */,
+				D1AA33D42D5E5AC3006219EC /* VideoModeView.swift */,
+				D1AA33C62D5E597B006219EC /* ContentView.swift */,
+				D1AA33C72D5E597B006219EC /* VideoPlayerView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		D1AA33CB2D5E597B006219EC /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				D1AA33C92D5E597B006219EC /* VideoMergerViewModel.swift */,
+				D1AA33CA2D5E597B006219EC /* VideoPlayerViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		D1AA33D12D5E59DE006219EC /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				D1AA33D02D5E59DE006219EC /* PhotoLibraryManager.swift */,
+			);
+			path = Managers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -205,8 +250,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D1AA33B52D5D9D68006219EC /* ContentView.swift in Sources */,
+				D1AA33D82D5E5AC3006219EC /* PhotoModeView.swift in Sources */,
+				D1AA33D62D5E5AC3006219EC /* ModePicker.swift in Sources */,
 				D1AA33B32D5D9D68006219EC /* MediaMasterApp.swift in Sources */,
+				D1AA33CC2D5E597B006219EC /* ContentView.swift in Sources */,
+				D1AA33D22D5E59DE006219EC /* PhotoLibraryManager.swift in Sources */,
+				D1AA33CF2D5E597B006219EC /* VideoPlayerViewModel.swift in Sources */,
+				D1AA33D72D5E5AC3006219EC /* VideoModeView.swift in Sources */,
+				D1AA33CE2D5E597B006219EC /* VideoMergerViewModel.swift in Sources */,
+				D1AA33CD2D5E597B006219EC /* VideoPlayerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
