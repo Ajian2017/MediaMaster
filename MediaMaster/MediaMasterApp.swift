@@ -6,56 +6,101 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 @main
 struct MediaMasterApp: App {
+    @UIApplicationDelegateAdaptor private var appDelegate: AppDelegate
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .onOpenURL { url in
-                    if url.pathExtension.lowercased() == "mp3" {
-                        // 创建 Input 文件夹
-                        let fileManager = FileManager.default
-                        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-                        let inputDirectoryURL = documentsURL.appendingPathComponent("Input")
-
-                        // 检查并创建 Input 文件夹
-                        if !fileManager.fileExists(atPath: inputDirectoryURL.path) {
-                            do {
-                                try fileManager.createDirectory(at: inputDirectoryURL, withIntermediateDirectories: true, attributes: nil)
-                            } catch {
-                                print("Error creating Input directory: \(error)")
-                            }
-                        }
-
-                        // 生成唯一的文件名
-                        let fileName = url.deletingPathExtension().lastPathComponent
-                        let fileExtension = url.pathExtension
-                        let timestamp = Int(Date().timeIntervalSince1970)
-                        let uniqueFileName = "\(fileName)_\(timestamp).\(fileExtension)"
-                        
-                        // 移动接收到的文件到 Input 文件夹
-                        let destinationURL = inputDirectoryURL.appendingPathComponent(uniqueFileName)
-                        do {
-                            if fileManager.fileExists(atPath: destinationURL.path) {
-                                try fileManager.removeItem(at: destinationURL)
-                            }
-                            try fileManager.moveItem(at: url, to: destinationURL)
-                            print("Successfully moved file to: \(destinationURL.path)")
-                            NotificationCenter.default.post(name: NSNotification.Name("OpenAudioFile"), object: destinationURL)
-                        } catch {
-                            print("Error moving file to Input directory: \(error)")
-                            // 如果移动失败，尝试复制
-                            do {
-                                try fileManager.copyItem(at: url, to: destinationURL)
-                                print("Successfully copied file to: \(destinationURL.path)")
-                                NotificationCenter.default.post(name: NSNotification.Name("OpenAudioFile"), object: destinationURL)
-                            } catch {
-                                print("Error copying file to Input directory: \(error)")
-                            }
-                        }
-                    }
+                    AudioFileManager.shared.handleExternalAudioFile(url)
                 }
+        }
+    }
+}
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        setupAudioSession()
+        setupAppearance()
+        setupDirectories()
+        return true
+    }
+    
+    private func setupAudioSession() {
+        do {
+            try AVAudioSession.sharedInstance().setCategory(
+                .playback,
+                mode: .default,
+                options: [.mixWithOthers, .allowAirPlay]
+            )
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print("Failed to set audio session category: \(error)")
+        }
+    }
+    
+    private func setupAppearance() {
+        // 设置导航栏样式
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithDefaultBackground()
+        UINavigationBar.appearance().standardAppearance = navigationBarAppearance
+        UINavigationBar.appearance().compactAppearance = navigationBarAppearance
+        UINavigationBar.appearance().scrollEdgeAppearance = navigationBarAppearance
+        
+        // 设置标签栏样式
+        let tabBarAppearance = UITabBarAppearance()
+        tabBarAppearance.configureWithDefaultBackground()
+        UITabBar.appearance().standardAppearance = tabBarAppearance
+        if #available(iOS 15.0, *) {
+            UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+        }
+    }
+    
+    private func setupDirectories() {
+        let fileManager = FileManager.default
+        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let inputDirectoryURL = documentsURL.appendingPathComponent("Input")
+        let outputDirectoryURL = documentsURL.appendingPathComponent("Output")
+        
+        // 创建必要的目录
+        try? fileManager.createDirectory(at: inputDirectoryURL, withIntermediateDirectories: true)
+        try? fileManager.createDirectory(at: outputDirectoryURL, withIntermediateDirectories: true)
+        
+        print("Documents directory: \(documentsURL.path)")
+        print("Input directory: \(inputDirectoryURL.path)")
+        print("Output directory: \(outputDirectoryURL.path)")
+    }
+}
+
+// 添加后台播放支持
+extension MediaMasterApp {
+    static var audioSessionSetupOnce: Bool = false
+    
+    static func setupBackgroundAudio() {
+        guard !audioSessionSetupOnce else { return }
+        audioSessionSetupOnce = true
+        
+        do {
+            try AVAudioSession.sharedInstance().setCategory(
+                .playback,
+                mode: .default,
+                options: [.mixWithOthers, .allowAirPlay]
+            )
+            try AVAudioSession.sharedInstance().setActive(true)
+            
+            // 开启后台播放
+            let audioSession = AVAudioSession.sharedInstance()
+            try audioSession.setCategory(.playback, mode: .default)
+            try audioSession.setActive(true)
+            
+            // 注册远程控制事件
+            UIApplication.shared.beginReceivingRemoteControlEvents()
+        } catch {
+            print("Failed to setup background audio: \(error)")
         }
     }
 }

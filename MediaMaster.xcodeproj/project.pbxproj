@@ -23,6 +23,7 @@
 		D1AA33D82D5E5AC3006219EC /* PhotoModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AA33D52D5E5AC3006219EC /* PhotoModeView.swift */; };
 		D1AA33DA2D5F6440006219EC /* AudioPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AA33D92D5F6440006219EC /* AudioPlayerView.swift */; };
 		D1AA33DC2D5F66DC006219EC /* AudioPlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AA33DB2D5F66DC006219EC /* AudioPlayerViewModel.swift */; };
+		D1E3BBD42D61A942006D0B38 /* AudioFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1E3BBD32D61A942006D0B38 /* AudioFileManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,7 @@
 		D1AA33D92D5F6440006219EC /* AudioPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayerView.swift; sourceTree = "<group>"; };
 		D1AA33DB2D5F66DC006219EC /* AudioPlayerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayerViewModel.swift; sourceTree = "<group>"; };
 		D1AA33DD2D5F7476006219EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D1E3BBD32D61A942006D0B38 /* AudioFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioFileManager.swift; sourceTree = "<group>"; };
 		F58F323B8E79F76C8264B921 /* Pods-MediaMaster.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MediaMaster.debug.xcconfig"; path = "Target Support Files/Pods-MediaMaster/Pods-MediaMaster.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -145,6 +147,7 @@
 		D1AA33D12D5E59DE006219EC /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				D1E3BBD32D61A942006D0B38 /* AudioFileManager.swift */,
 				D1AA33D02D5E59DE006219EC /* PhotoLibraryManager.swift */,
 			);
 			path = Managers;
@@ -270,6 +273,7 @@
 				D1AA33D62D5E5AC3006219EC /* ModePicker.swift in Sources */,
 				D1AA33B32D5D9D68006219EC /* MediaMasterApp.swift in Sources */,
 				D1AA33CC2D5E597B006219EC /* ContentView.swift in Sources */,
+				D1E3BBD42D61A942006D0B38 /* AudioFileManager.swift in Sources */,
 				D1AA33DA2D5F6440006219EC /* AudioPlayerView.swift in Sources */,
 				D1AA33D22D5E59DE006219EC /* PhotoLibraryManager.swift in Sources */,
 				D1AA33CF2D5E597B006219EC /* VideoPlayerViewModel.swift in Sources */,
