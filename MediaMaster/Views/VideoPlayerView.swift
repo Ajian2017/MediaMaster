@@ -1,39 +1,82 @@
 import SwiftUI
 import AVKit
 
+// 视频播放器容器视图
+struct VideoPlayerContainerView: UIViewRepresentable {
+    let player: AVPlayer?
+    
+    func makeUIView(context: Context) -> UIView {
+        let view = UIView()
+        view.backgroundColor = .black
+        
+        let layer = AVPlayerLayer(player: player)
+        layer.videoGravity = .resizeAspect
+        view.layer.addSublayer(layer)
+        
+        return view
+    }
+    
+    func updateUIView(_ uiView: UIView, context: Context) {
+        if let layer = uiView.layer.sublayers?.first as? AVPlayerLayer {
+            layer.frame = uiView.bounds
+            layer.player = player
+        }
+    }
+}
+
 struct VideoPlayerView: View {
     @StateObject private var viewModel = VideoPlayerViewModel()
     let videoURL: URL
     var onSave: () -> Void
     
     @State private var showingSaveAlert = false
+    @Environment(\.scenePhase) private var scenePhase
     
     var body: some View {
-        ZStack {
-            VideoPlayer(player: viewModel.playerInstance)
-                .ignoresSafeArea()
-                .onAppear { viewModel.setupPlayer(with: videoURL) }
-                .onDisappear { viewModel.cleanup() }
-            
-            VStack {
-                Spacer()
-                VideoControlsView(
-                    currentTime: $viewModel.currentTime,
-                    duration: viewModel.duration,
-                    isPlaying: $viewModel.isPlaying,
-                    onSeek: viewModel.seek(to:),
-                    onPlayPause: viewModel.togglePlayback,
-                    onSave: { showingSaveAlert = true }
-                )
+        VideoPlayerContainerView(player: viewModel.playerInstance)
+            .ignoresSafeArea()
+            .onAppear { 
+                viewModel.setupPlayer(with: videoURL) 
             }
-        }
-        .alert("保存视频", isPresented: $showingSaveAlert) {
-            Button("取消", role: .cancel) { }
-            Button("保存到相册") { onSave() }
-            Button("保存到 Input") { saveToInput() }
-        } message: {
-            Text("选择保存位置")
-        }
+            .onDisappear { viewModel.cleanup() }
+            .onChange(of: scenePhase) { _, phase in
+                print("Scene phase changed to: \(phase)")
+                switch phase {
+                case .background:
+                    // 进入后台时继续播放
+                    viewModel.setupBackgroundPlayback()
+                case .inactive:
+                    // 应用即将进入后台，确保设置好后台播放
+                    viewModel.setupBackgroundPlayback()
+                case .active:
+                    // 返回前台时恢复播放
+                    if viewModel.isPlaying {
+                        viewModel.playerInstance?.play()
+                    }
+                @unknown default:
+                    break
+                }
+            }
+            .overlay(
+                VStack {
+                    Spacer()
+                    VideoControlsView(
+                        currentTime: $viewModel.currentTime,
+                        duration: viewModel.duration,
+                        isPlaying: $viewModel.isPlaying,
+                        onSeek: viewModel.seek(to:),
+                        onPlayPause: viewModel.togglePlayback,
+                        onSave: { showingSaveAlert = true }
+                    )
+                }
+            )
+            .alert("保存视频", isPresented: $showingSaveAlert) {
+                Button("取消", role: .cancel) { }
+                Button("保存到相册") { onSave() }
+                Button("保存到 Input") { saveToInput() }
+            } message: {
+                Text("选择保存位置")
+            }
     }
     
     private func saveToInput() {
