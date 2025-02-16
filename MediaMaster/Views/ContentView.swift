@@ -20,11 +20,14 @@ struct MovieTransferable: Transferable {
 
 struct ContentView: View {
     @StateObject private var mergerViewModel = VideoMergerViewModel()
+    @StateObject private var audioViewModel = AudioPlayerViewModel()
     @State private var selectedItems: [PhotosPickerItem] = []
     @State private var selectedVideos: [AVAsset] = []
     @State private var isVideoMode = false
     @State private var activeSheet: ActiveSheet? = nil
     @State private var audioURL: URL?
+    @State private var currentAudio: URL? = nil
+    @State private var isAudioMinimized = false
     
     enum ActiveSheet: Identifiable {
         case videoPreview(URL)
@@ -42,102 +45,108 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
-            VStack {
-                ModePicker(isVideoMode: $isVideoMode)
+            ZStack(alignment: .bottom) {
+                mainContent
+                    .navigationTitle(isVideoMode ? "视频合并" : "相册浏览")
+                    .toolbar { toolbarContent }
+                    .padding(.bottom, isAudioMinimized ? 80 : 0)
+                    .animation(.easeInOut, value: isAudioMinimized)
                 
-                if isVideoMode {
-                    VideoModeView(
-                        selectedVideos: $selectedVideos,
-                        onMerge: mergeVideos
+                if isAudioMinimized, let url = currentAudio {
+                    MinimizedAudioPlayer(
+                        audioURL: url,
+                        isMinimized: $isAudioMinimized,
+                        viewModel: audioViewModel,
+                        onTap: { activeSheet = .audioPlayer(url) },
+                        onClose: {
+                            audioViewModel.cleanup()
+                            currentAudio = nil
+                            isAudioMinimized = false
+                        }
                     )
-                } else {
-                    PhotoModeView(selectedItems: $selectedItems)
-                }
-                
-                PhotosPicker(
-                    selection: $selectedItems,
-                    matching: isVideoMode ? .videos : .images
-                ) {
-                    Label(isVideoMode ? "选择视频" : "选择照片", 
-                          systemImage: isVideoMode ? "video" : "photo")
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                        .padding(.horizontal)
+                    .transition(.move(edge: .bottom))
+                    .ignoresSafeArea(.all, edges: .bottom)
                 }
             }
-            .navigationTitle(isVideoMode ? "视频合并" : "相册浏览")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        activeSheet = .inputFileList
-                    }) {
-                        Image(systemName: "folder")
-                            .foregroundColor(.blue)
-                    }
-                }
-            }
-            .sheet(item: $activeSheet) { sheet in
-                switch sheet {
-                case .videoPreview(let url):
-                    VideoPlayerView(videoURL: url) {
-                        saveVideoToAlbum(url: url)
-                    }
-                case .audioPlayer(let url):
-                    AudioPlayerView(audioURL: url)
-                case .inputFileList:
-                    InputFileListView(audioURL: $audioURL) { url in
-                        activeSheet = .audioPlayer(url)
-                    }
-                }
-            }
-            .alert("提示", isPresented: $mergerViewModel.showAlert) {
-                Button("确定", role: .cancel) { }
-            } message: {
-                Text(mergerViewModel.alertMessage)
-            }
-            .overlay {
-                if mergerViewModel.isExporting {
-                    ProgressView("正在合并视频...")
-                        .padding()
-                        .background(Color.black.opacity(0.5))
-                        .cornerRadius(10)
-                }
-            }
-            .onChange(of: selectedItems) { _, newItems in
-                Task {
-                    selectedVideos = []
-                    for item in newItems {
-                        if let videoAsset = try? await item.loadTransferable(type: MovieTransferable.self) {
-                            selectedVideos.append(videoAsset.asset)
-                        }
-                    }
-                }
-            }
-            .onDrop(of: [.audio, .mp3, .mpeg4Audio, .wav], isTargeted: nil) { providers in
-                Task {
-                    for provider in providers {
-                        for typeIdentifier in provider.registeredTypeIdentifiers {
-                            if let url = try? await provider.loadItem(forTypeIdentifier: typeIdentifier) as? URL {
-                                audioURL = url
-                                activeSheet = .inputFileList
-                                return true
-                            }
-                        }
-                    }
-                    return false
-                }
-                return true
-            }
+            .sheet(item: $activeSheet) { sheetContent($0) }
         }
-        .onAppear {
-            setupNotifications()
-        }
+        .onChange(of: selectedItems, perform: handleSelectedItems)
+        .onDrop(of: [.audio, .mp3, .mpeg4Audio, .wav], isTargeted: nil, perform: handleDrop)
+        .onAppear { setupNotifications() }
         .onDisappear {
             NotificationCenter.default.removeObserver(self)
         }
+    }
+    
+    private var mainContent: some View {
+        MainContentView(
+            isVideoMode: $isVideoMode,
+            selectedItems: $selectedItems,
+            selectedVideos: $selectedVideos,
+            onMerge: mergeVideos
+        )
+    }
+    
+    private var toolbarContent: some ToolbarContent {
+        ToolbarItem(placement: .navigationBarTrailing) {
+            Button(action: {
+                activeSheet = .inputFileList
+            }) {
+                Image(systemName: "folder")
+                    .foregroundColor(.blue)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func sheetContent(_ sheet: ActiveSheet) -> some View {
+        switch sheet {
+        case .videoPreview(let url):
+            VideoPlayerView(videoURL: url) {
+                saveVideoToAlbum(url: url)
+            }
+        case .audioPlayer(let url):
+            AudioPlayerView(
+                viewModel: audioViewModel,
+                isMinimized: $isAudioMinimized,
+                audioURL: url,
+                onMinimize: {
+                    currentAudio = url
+                }
+            )
+        case .inputFileList:
+            InputFileListView(audioURL: $audioURL) { url in
+                currentAudio = url
+                activeSheet = .audioPlayer(url)
+            }
+        }
+    }
+    
+    private func handleSelectedItems(_ newItems: [PhotosPickerItem]) {
+        Task {
+            selectedVideos = []
+            for item in newItems {
+                if let videoAsset = try? await item.loadTransferable(type: MovieTransferable.self) {
+                    selectedVideos.append(videoAsset.asset)
+                }
+            }
+        }
+    }
+    
+    private func handleDrop(_ providers: [NSItemProvider]) -> Bool {
+        Task {
+            for provider in providers {
+                for typeIdentifier in provider.registeredTypeIdentifiers {
+                    if let url = try? await provider.loadItem(forTypeIdentifier: typeIdentifier) as? URL {
+                        audioURL = url
+                        activeSheet = .inputFileList
+                        return true
+                    }
+                }
+            }
+            return false
+        }
+        return true
     }
     
     private func mergeVideos() {
@@ -181,4 +190,61 @@ extension UTType {
     static let mp3 = UTType(filenameExtension: "mp3", conformingTo: .audio)!
     static let wav = UTType(filenameExtension: "wav", conformingTo: .audio)!
     static let mpeg4Audio = UTType(filenameExtension: "m4a", conformingTo: .audio)!
+}
+
+// 修改最小化播放器视图
+struct MinimizedAudioPlayer: View {
+    let audioURL: URL
+    @Binding var isMinimized: Bool
+    @ObservedObject var viewModel: AudioPlayerViewModel
+    let onTap: () -> Void
+    let onClose: () -> Void
+    
+    var body: some View {
+        HStack(spacing: 16) {
+            // 音乐图标
+            Image(systemName: "music.note")
+                .font(.title2)
+                .foregroundColor(.blue)
+                .frame(width: 40)
+            
+            // 文件名和进度条
+            VStack(alignment: .leading, spacing: 4) {
+                Text(audioURL.lastPathComponent)
+                    .lineLimit(1)
+                    .font(.subheadline)
+                
+                ProgressView(value: viewModel.currentTime, total: viewModel.duration)
+                    .progressViewStyle(.linear)
+                    .frame(height: 2)
+            }
+            
+            // 播放/暂停按钮
+            Button(action: {
+                if viewModel.isPlaying {
+                    viewModel.pause()
+                } else {
+                    viewModel.play()
+                }
+            }) {
+                Image(systemName: viewModel.isPlaying ? "pause.circle.fill" : "play.circle.fill")
+                    .font(.title2)
+                    .foregroundColor(.blue)
+            }
+            
+            // 关闭按钮
+            Button(action: onClose) {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.title2)
+                    .foregroundColor(.gray)
+            }
+        }
+        .padding(.horizontal)
+        .frame(height: 60)
+        .background(Color(UIColor.systemBackground))
+        .shadow(radius: 5)
+        .onTapGesture(perform: onTap)
+        .background(Color(UIColor.systemBackground))
+        .edgesIgnoringSafeArea(.bottom)
+    }
 } 

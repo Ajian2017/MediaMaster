@@ -17,8 +17,13 @@ class AudioPlayerViewModel: ObservableObject {
     private var isShuttingDown = false  // 添加标志以防止重复清理
     
     func setupPlayer(with url: URL) async {
+        // 如果已经在播放同一个文件，不需要重新设置
+        if audioURL == url && isReady {
+            return
+        }
+        
         isReady = false
-        isShuttingDown = false  // 重置关闭标志
+        isShuttingDown = false
         
         // 加载播放列表
         loadPlaylist()
@@ -214,5 +219,6 @@ class AudioPlayerViewModel: ObservableObject {
         }
         
         isShuttingDown = false
+        isReady = false
     }
 } 

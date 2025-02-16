@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		AA4535B048A19608143DD2C8 /* Pods_MediaMaster.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B79D3D3C7D587EFA9798F2E4 /* Pods_MediaMaster.framework */; };
 		D124523B2D6193D000CCB7C6 /* InputFileListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D124523A2D6193D000CCB7C6 /* InputFileListView.swift */; };
+		D124523D2D619F0000CCB7C6 /* MainContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D124523C2D619F0000CCB7C6 /* MainContentView.swift */; };
 		D1AA33B32D5D9D68006219EC /* MediaMasterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AA33B22D5D9D68006219EC /* MediaMasterApp.swift */; };
 		D1AA33B72D5D9D69006219EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D1AA33B62D5D9D69006219EC /* Assets.xcassets */; };
 		D1AA33BA2D5D9D69006219EC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D1AA33B92D5D9D69006219EC /* Preview Assets.xcassets */; };
@@ -28,6 +29,7 @@
 		843065090FAB3FDB99B2B401 /* Pods-MediaMaster.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MediaMaster.release.xcconfig"; path = "Target Support Files/Pods-MediaMaster/Pods-MediaMaster.release.xcconfig"; sourceTree = "<group>"; };
 		B79D3D3C7D587EFA9798F2E4 /* Pods_MediaMaster.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MediaMaster.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D124523A2D6193D000CCB7C6 /* InputFileListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputFileListView.swift; sourceTree = "<group>"; };
+		D124523C2D619F0000CCB7C6 /* MainContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainContentView.swift; sourceTree = "<group>"; };
 		D1AA33AF2D5D9D68006219EC /* MediaMaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MediaMaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1AA33B22D5D9D68006219EC /* MediaMasterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaMasterApp.swift; sourceTree = "<group>"; };
 		D1AA33B62D5D9D69006219EC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 		D1AA33C82D5E597B006219EC /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D124523C2D619F0000CCB7C6 /* MainContentView.swift */,
 				D124523A2D6193D000CCB7C6 /* InputFileListView.swift */,
 				D1AA33D92D5F6440006219EC /* AudioPlayerView.swift */,
 				D1AA33D32D5E5AC3006219EC /* ModePicker.swift */,
@@ -263,6 +266,7 @@
 			files = (
 				D1AA33D82D5E5AC3006219EC /* PhotoModeView.swift in Sources */,
 				D124523B2D6193D000CCB7C6 /* InputFileListView.swift in Sources */,
+				D124523D2D619F0000CCB7C6 /* MainContentView.swift in Sources */,
 				D1AA33D62D5E5AC3006219EC /* ModePicker.swift in Sources */,
 				D1AA33B32D5D9D68006219EC /* MediaMasterApp.swift in Sources */,
 				D1AA33CC2D5E597B006219EC /* ContentView.swift in Sources */,
