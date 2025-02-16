@@ -10,6 +10,8 @@ class VideoPlayerViewModel: ObservableObject {
     private var timeObserver: Any?
     
     func setupPlayer(with url: URL) {
+        cleanup()
+        
         player = AVPlayer(url: url)
         
         if let playerItem = player?.currentItem {

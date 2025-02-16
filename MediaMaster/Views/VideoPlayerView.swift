@@ -17,27 +17,20 @@ struct VideoPlayerView: View {
             
             VStack {
                 Spacer()
-                
                 VideoControlsView(
                     currentTime: $viewModel.currentTime,
                     duration: viewModel.duration,
                     isPlaying: $viewModel.isPlaying,
                     onSeek: viewModel.seek(to:),
                     onPlayPause: viewModel.togglePlayback,
-                    onSave: {
-                        showingSaveAlert = true
-                    }
+                    onSave: { showingSaveAlert = true }
                 )
             }
         }
         .alert("保存视频", isPresented: $showingSaveAlert) {
             Button("取消", role: .cancel) { }
-            Button("保存到相册") {
-                onSave()
-            }
-            Button("保存到 Input") {
-                saveToInput()
-            }
+            Button("保存到相册") { onSave() }
+            Button("保存到 Input") { saveToInput() }
         } message: {
             Text("选择保存位置")
         }
@@ -61,7 +54,6 @@ struct VideoPlayerView: View {
             
             // 复制文件
             try fileManager.copyItem(at: videoURL, to: destinationURL)
-            print("Successfully saved video to Input folder: \(destinationURL.path)")
             
             // 通知文件夹内容变化
             NotificationCenter.default.post(
