@@ -57,6 +57,16 @@ struct ContentView: View {
                 }
             }
             .navigationTitle(isVideoMode ? "视频合并" : "相册浏览")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        showingInputFileList = true
+                    }) {
+                        Image(systemName: "folder")
+                            .foregroundColor(.blue)
+                    }
+                }
+            }
             .sheet(isPresented: $showingVideoPreview) {
                 if let url = mergerViewModel.exportedVideoURL {
                     VideoPlayerView(videoURL: url) {

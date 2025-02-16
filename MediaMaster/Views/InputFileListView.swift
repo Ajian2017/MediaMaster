@@ -16,11 +16,20 @@ struct InputFileListView: View {
                 }) {
                     HStack {
                         Image(systemName: "music.note")
-                        Text(file.lastPathComponent)
+                            .foregroundColor(.blue)
+                        VStack(alignment: .leading) {
+                            Text(file.lastPathComponent)
+                                .lineLimit(1)
+                            Text(formatFileDate(for: file))
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                        }
                         Spacer()
-                        Image(systemName: "chevron.right")
-                            .foregroundColor(.gray)
+                        Image(systemName: "play.circle.fill")
+                            .foregroundColor(.blue)
+                            .font(.title2)
                     }
+                    .contentShape(Rectangle())
                 }
             }
             .navigationTitle("Input 文件夹")
@@ -39,12 +48,34 @@ struct InputFileListView: View {
         do {
             let files = try fileManager.contentsOfDirectory(
                 at: inputDirectoryURL,
-                includingPropertiesForKeys: nil
+                includingPropertiesForKeys: [.contentModificationDateKey],
+                options: [.skipsHiddenFiles]
             )
-            inputFiles = files.filter { $0.pathExtension.lowercased() == "mp3" }
+            inputFiles = files
+                .filter { $0.pathExtension.lowercased() == "mp3" }
+                .sorted { file1, file2 in
+                    let date1 = try? file1.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate
+                    let date2 = try? file2.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate
+                    return date1 ?? Date() > date2 ?? Date()
+                }
             print("Loaded input files: \(inputFiles)")
         } catch {
             print("Error loading input files: \(error)")
         }
+    }
+
+    private func formatFileDate(for file: URL) -> String {
+        do {
+            let resources = try file.resourceValues(forKeys: [.contentModificationDateKey])
+            if let date = resources.contentModificationDate {
+                let formatter = DateFormatter()
+                formatter.dateStyle = .medium
+                formatter.timeStyle = .short
+                return formatter.string(from: date)
+            }
+        } catch {
+            print("Error getting file date: \(error)")
+        }
+        return ""
     }
 } 
