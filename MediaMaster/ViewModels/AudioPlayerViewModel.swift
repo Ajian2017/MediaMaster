@@ -26,7 +26,7 @@ class AudioPlayerViewModel: ObservableObject {
         isShuttingDown = false
         
         // 加载播放列表
-        loadPlaylist()
+        loadPlaylist(url)
         
         // 设置当前播放索引
         if let index = playlist.firstIndex(of: url) {
@@ -43,10 +43,10 @@ class AudioPlayerViewModel: ObservableObject {
         }
     }
     
-    private func loadPlaylist() {
+    private func loadPlaylist(_ url: URL? = nil) {
         let fileManager = FileManager.default
         let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let inputDirectoryURL = documentsURL.appendingPathComponent("Input")
+        let inputDirectoryURL = url?.deletingLastPathComponent() ?? documentsURL.appendingPathComponent("Input")
         
         do {
             let files = try fileManager.contentsOfDirectory(

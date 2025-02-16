@@ -71,17 +71,31 @@ class AudioFileManager {
     }
     
     // 移动文件到指定文件夹
-    func moveFile(_ fileURL: URL, to folderURL: URL) {
+    func moveFile(_ fileURL: URL, to folderURL: URL) throws {
+        // 使用原始文件名（不添加时间戳）
         let destinationURL = folderURL.appendingPathComponent(fileURL.lastPathComponent)
+        
         do {
+            // 如果目标文件已存在，先删除
             if fileManager.fileExists(atPath: destinationURL.path) {
                 try fileManager.removeItem(at: destinationURL)
             }
-            try fileManager.moveItem(at: fileURL, to: destinationURL)
-            print("Moved file to: \(destinationURL.path)")
+            
+            // 读取源文件数据
+            let fileData = try Data(contentsOf: fileURL)
+            
+            // 写入新文件
+            try fileData.write(to: destinationURL)
+            
+            // 删除源文件
+            try fileManager.removeItem(at: fileURL)
+            
+            print("Successfully moved file from: \(fileURL.path)")
+            print("To: \(destinationURL.path)")
             notifyFolderChanged()
         } catch {
             print("Error moving file: \(error)")
+            throw error
         }
     }
     

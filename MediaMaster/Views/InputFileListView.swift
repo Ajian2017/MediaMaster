@@ -11,6 +11,9 @@ struct InputFileListView: View {
     @State private var showingDeleteAlert = false
     @State private var itemToDelete: URL?
     @State private var newFolderName = ""
+    @State private var showingMoveSheet = false
+    @State private var itemToMove: URL?
+    @State private var selectedDestination: URL?
     
     var body: some View {
         NavigationView {
@@ -67,6 +70,13 @@ struct InputFileListView: View {
                                 Label("删除文件夹", systemImage: "trash")
                             }
                         } else {
+                            Button {
+                                itemToMove = url
+                                showingMoveSheet = true
+                            } label: {
+                                Label("移动到...", systemImage: "folder")
+                            }
+                            
                             Button(role: .destructive) {
                                 itemToDelete = url
                                 showingDeleteAlert = true
@@ -127,6 +137,27 @@ struct InputFileListView: View {
                     Text("确定要删除\(isDirectory ? "文件夹" : "文件"): \(url.lastPathComponent) 吗？\(isDirectory ? "\n注意：文件夹内的所有内容都将被删除" : "")")
                 }
             }
+            .sheet(isPresented: $showingMoveSheet) {
+                FolderPickerView(
+                    currentDirectory: nil,
+                    selectedFolder: $selectedDestination,
+                    excludeURL: itemToMove
+                )
+                .onChange(of: selectedDestination) { newValue in
+                    if let destination = newValue,
+                       let source = itemToMove {
+                        do {
+                            try AudioFileManager.shared.moveFile(source, to: destination)
+                        } catch {
+                            print("Error moving file: \(error)")
+                        }
+                        selectedDestination = nil
+                        showingMoveSheet = false
+                        itemToMove = nil
+                        loadFiles()
+                    }
+                }
+            }
         }
         .onAppear(perform: loadFiles)
         .onReceive(NotificationCenter.default.publisher(for: AudioFileManager.folderChangedNotification)) { _ in
@@ -151,5 +182,64 @@ struct InputFileListView: View {
             print("Error getting file date: \(error)")
         }
         return ""
+    }
+}
+
+// 添加文件夹选择器视图
+struct FolderPickerView: View {
+    @Environment(\.dismiss) private var dismiss
+    var currentDirectory: URL?
+    @Binding var selectedFolder: URL?
+    var excludeURL: URL?
+    
+    @State private var files: [URL] = []
+    
+    var body: some View {
+        NavigationView {
+            List {
+                if let current = currentDirectory {
+                    Button(action: {
+                        selectedFolder = current.deletingLastPathComponent()
+                    }) {
+                        HStack {
+                            Image(systemName: "arrow.backward")
+                            Text("选择当前文件夹")
+                        }
+                    }
+                }
+                
+                ForEach(files, id: \.self) { url in
+                    if url != excludeURL && AudioFileManager.shared.isDirectory(url: url) {
+                        Button(action: {
+                            selectedFolder = url
+                        }) {
+                            HStack {
+                                Image(systemName: "folder")
+                                    .foregroundColor(.blue)
+                                Text(url.lastPathComponent)
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(.gray)
+                            }
+                        }
+                    }
+                }
+            }
+            .navigationTitle("选择目标文件夹")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("取消") {
+                        dismiss()
+                    }
+                }
+            }
+        }
+        .onAppear {
+            loadFolders()
+        }
+    }
+    
+    private func loadFolders() {
+        files = AudioFileManager.shared.getContents(at: currentDirectory)
     }
 } 
