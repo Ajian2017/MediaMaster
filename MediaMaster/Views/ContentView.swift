@@ -1,6 +1,8 @@
 import SwiftUI
 import PhotosUI
 import AVFoundation
+import UniformTypeIdentifiers
+import MobileCoreServices
 
 struct MovieTransferable: Transferable {
     let asset: AVAsset
@@ -22,6 +24,8 @@ struct ContentView: View {
     @State private var selectedVideos: [AVAsset] = []
     @State private var isVideoMode = false
     @State private var showingVideoPreview = false
+    @State private var showingAudioPlayer = false
+    @State private var audioURL: URL?
     
     var body: some View {
         NavigationStack {
@@ -59,6 +63,11 @@ struct ContentView: View {
                     }
                 }
             }
+            .sheet(isPresented: $showingAudioPlayer) {
+                if let url = audioURL {
+                    AudioPlayerView(audioURL: url)
+                }
+            }
             .alert("提示", isPresented: $mergerViewModel.showAlert) {
                 Button("确定", role: .cancel) { }
             } message: {
@@ -82,6 +91,27 @@ struct ContentView: View {
                     }
                 }
             }
+            .onDrop(of: [.audio, .mp3, .mpeg4Audio, .wav], isTargeted: nil) { providers in
+                Task {
+                    for provider in providers {
+                        for typeIdentifier in provider.registeredTypeIdentifiers {
+                            if let url = try? await provider.loadItem(forTypeIdentifier: typeIdentifier) as? URL {
+                                audioURL = url
+                                showingAudioPlayer = true
+                                return true
+                            }
+                        }
+                    }
+                    return false
+                }
+                return true
+            }
+        }
+        .onAppear {
+            setupNotifications()
+        }
+        .onDisappear {
+            NotificationCenter.default.removeObserver(self)
         }
     }
     
@@ -107,4 +137,23 @@ struct ContentView: View {
             }
         }
     }
+    
+    private func setupNotifications() {
+        NotificationCenter.default.addObserver(
+            forName: NSNotification.Name("OpenAudioFile"),
+            object: nil,
+            queue: .main
+        ) { notification in
+            if let url = notification.object as? URL {
+                audioURL = url
+                showingAudioPlayer = true
+            }
+        }
+    }
+}
+
+extension UTType {
+    static let mp3 = UTType(filenameExtension: "mp3", conformingTo: .audio)!
+    static let wav = UTType(filenameExtension: "wav", conformingTo: .audio)!
+    static let mpeg4Audio = UTType(filenameExtension: "m4a", conformingTo: .audio)!
 } 

@@ -19,6 +19,8 @@
 		D1AA33D62D5E5AC3006219EC /* ModePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AA33D32D5E5AC3006219EC /* ModePicker.swift */; };
 		D1AA33D72D5E5AC3006219EC /* VideoModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AA33D42D5E5AC3006219EC /* VideoModeView.swift */; };
 		D1AA33D82D5E5AC3006219EC /* PhotoModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AA33D52D5E5AC3006219EC /* PhotoModeView.swift */; };
+		D1AA33DA2D5F6440006219EC /* AudioPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AA33D92D5F6440006219EC /* AudioPlayerView.swift */; };
+		D1AA33DC2D5F66DC006219EC /* AudioPlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AA33DB2D5F66DC006219EC /* AudioPlayerViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,9 @@
 		D1AA33D32D5E5AC3006219EC /* ModePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModePicker.swift; sourceTree = "<group>"; };
 		D1AA33D42D5E5AC3006219EC /* VideoModeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoModeView.swift; sourceTree = "<group>"; };
 		D1AA33D52D5E5AC3006219EC /* PhotoModeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoModeView.swift; sourceTree = "<group>"; };
+		D1AA33D92D5F6440006219EC /* AudioPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayerView.swift; sourceTree = "<group>"; };
+		D1AA33DB2D5F66DC006219EC /* AudioPlayerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayerViewModel.swift; sourceTree = "<group>"; };
+		D1AA33DD2D5F7476006219EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F58F323B8E79F76C8264B921 /* Pods-MediaMaster.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MediaMaster.debug.xcconfig"; path = "Target Support Files/Pods-MediaMaster/Pods-MediaMaster.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -89,6 +94,7 @@
 		D1AA33B12D5D9D68006219EC /* MediaMaster */ = {
 			isa = PBXGroup;
 			children = (
+				D1AA33DD2D5F7476006219EC /* Info.plist */,
 				D1AA33D12D5E59DE006219EC /* Managers */,
 				D1AA33CB2D5E597B006219EC /* ViewModels */,
 				D1AA33C82D5E597B006219EC /* Views */,
@@ -110,6 +116,7 @@
 		D1AA33C82D5E597B006219EC /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D1AA33D92D5F6440006219EC /* AudioPlayerView.swift */,
 				D1AA33D32D5E5AC3006219EC /* ModePicker.swift */,
 				D1AA33D52D5E5AC3006219EC /* PhotoModeView.swift */,
 				D1AA33D42D5E5AC3006219EC /* VideoModeView.swift */,
@@ -122,6 +129,7 @@
 		D1AA33CB2D5E597B006219EC /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				D1AA33DB2D5F66DC006219EC /* AudioPlayerViewModel.swift */,
 				D1AA33C92D5E597B006219EC /* VideoMergerViewModel.swift */,
 				D1AA33CA2D5E597B006219EC /* VideoPlayerViewModel.swift */,
 			);
@@ -254,8 +262,10 @@
 				D1AA33D62D5E5AC3006219EC /* ModePicker.swift in Sources */,
 				D1AA33B32D5D9D68006219EC /* MediaMasterApp.swift in Sources */,
 				D1AA33CC2D5E597B006219EC /* ContentView.swift in Sources */,
+				D1AA33DA2D5F6440006219EC /* AudioPlayerView.swift in Sources */,
 				D1AA33D22D5E59DE006219EC /* PhotoLibraryManager.swift in Sources */,
 				D1AA33CF2D5E597B006219EC /* VideoPlayerViewModel.swift in Sources */,
+				D1AA33DC2D5F66DC006219EC /* AudioPlayerViewModel.swift in Sources */,
 				D1AA33D72D5E5AC3006219EC /* VideoModeView.swift in Sources */,
 				D1AA33CE2D5E597B006219EC /* VideoMergerViewModel.swift in Sources */,
 				D1AA33CD2D5E597B006219EC /* VideoPlayerView.swift in Sources */,
@@ -396,6 +406,9 @@
 				DEVELOPMENT_TEAM = UF4MQ2CLW6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MediaMaster/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "拼接保存视频";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "保存拼接视频";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -429,6 +442,9 @@
 				DEVELOPMENT_TEAM = UF4MQ2CLW6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MediaMaster/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "拼接保存视频";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "保存拼接视频";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
