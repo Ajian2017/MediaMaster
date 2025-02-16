@@ -26,6 +26,7 @@ struct ContentView: View {
     @State private var showingVideoPreview = false
     @State private var showingAudioPlayer = false
     @State private var audioURL: URL?
+    @State private var showingInputFileList = false
     
     var body: some View {
         NavigationStack {
@@ -68,6 +69,9 @@ struct ContentView: View {
                     AudioPlayerView(audioURL: url)
                 }
             }
+            .sheet(isPresented: $showingInputFileList) {
+                InputFileListView(audioURL: $audioURL, showingAudioPlayer: $showingAudioPlayer)
+            }
             .alert("提示", isPresented: $mergerViewModel.showAlert) {
                 Button("确定", role: .cancel) { }
             } message: {
@@ -97,7 +101,7 @@ struct ContentView: View {
                         for typeIdentifier in provider.registeredTypeIdentifiers {
                             if let url = try? await provider.loadItem(forTypeIdentifier: typeIdentifier) as? URL {
                                 audioURL = url
-                                showingAudioPlayer = true
+                                showingInputFileList = true
                                 return true
                             }
                         }
@@ -146,7 +150,7 @@ struct ContentView: View {
         ) { notification in
             if let url = notification.object as? URL {
                 audioURL = url
-                showingAudioPlayer = true
+                showingInputFileList = true
             }
         }
     }
