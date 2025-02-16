@@ -23,10 +23,22 @@ struct ContentView: View {
     @State private var selectedItems: [PhotosPickerItem] = []
     @State private var selectedVideos: [AVAsset] = []
     @State private var isVideoMode = false
-    @State private var showingVideoPreview = false
-    @State private var showingAudioPlayer = false
+    @State private var activeSheet: ActiveSheet? = nil
     @State private var audioURL: URL?
-    @State private var showingInputFileList = false
+    
+    enum ActiveSheet: Identifiable {
+        case videoPreview(URL)
+        case audioPlayer(URL)
+        case inputFileList
+        
+        var id: Int {
+            switch self {
+            case .videoPreview: return 1
+            case .audioPlayer: return 2
+            case .inputFileList: return 3
+            }
+        }
+    }
     
     var body: some View {
         NavigationStack {
@@ -60,27 +72,26 @@ struct ContentView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
-                        showingInputFileList = true
+                        activeSheet = .inputFileList
                     }) {
                         Image(systemName: "folder")
                             .foregroundColor(.blue)
                     }
                 }
             }
-            .sheet(isPresented: $showingVideoPreview) {
-                if let url = mergerViewModel.exportedVideoURL {
+            .sheet(item: $activeSheet) { sheet in
+                switch sheet {
+                case .videoPreview(let url):
                     VideoPlayerView(videoURL: url) {
                         saveVideoToAlbum(url: url)
                     }
-                }
-            }
-            .sheet(isPresented: $showingAudioPlayer) {
-                if let url = audioURL {
+                case .audioPlayer(let url):
                     AudioPlayerView(audioURL: url)
+                case .inputFileList:
+                    InputFileListView(audioURL: $audioURL) { url in
+                        activeSheet = .audioPlayer(url)
+                    }
                 }
-            }
-            .sheet(isPresented: $showingInputFileList) {
-                InputFileListView(audioURL: $audioURL, showingAudioPlayer: $showingAudioPlayer)
             }
             .alert("提示", isPresented: $mergerViewModel.showAlert) {
                 Button("确定", role: .cancel) { }
@@ -111,7 +122,7 @@ struct ContentView: View {
                         for typeIdentifier in provider.registeredTypeIdentifiers {
                             if let url = try? await provider.loadItem(forTypeIdentifier: typeIdentifier) as? URL {
                                 audioURL = url
-                                showingInputFileList = true
+                                activeSheet = .inputFileList
                                 return true
                             }
                         }
@@ -132,8 +143,8 @@ struct ContentView: View {
     private func mergeVideos() {
         Task {
             await mergerViewModel.mergeVideos(selectedVideos)
-            if mergerViewModel.exportedVideoURL != nil {
-                showingVideoPreview = true
+            if let url = mergerViewModel.exportedVideoURL {
+                activeSheet = .videoPreview(url)
             }
         }
     }
@@ -160,7 +171,7 @@ struct ContentView: View {
         ) { notification in
             if let url = notification.object as? URL {
                 audioURL = url
-                showingInputFileList = true
+                activeSheet = .inputFileList
             }
         }
     }

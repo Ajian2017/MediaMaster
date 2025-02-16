@@ -3,33 +3,44 @@ import SwiftUI
 struct InputFileListView: View {
     @Environment(\.dismiss) private var dismiss
     @Binding var audioURL: URL?
-    @Binding var showingAudioPlayer: Bool
+    let onSelectAudio: (URL) -> Void
     @State private var inputFiles: [URL] = []
+    @State private var showingDeleteAlert = false
+    @State private var fileToDelete: URL?
 
     var body: some View {
         NavigationView {
-            List(inputFiles, id: \.self) { file in
-                Button(action: {
-                    audioURL = file
-                    showingAudioPlayer = true
-                    dismiss()
-                }) {
-                    HStack {
-                        Image(systemName: "music.note")
-                            .foregroundColor(.blue)
-                        VStack(alignment: .leading) {
-                            Text(file.lastPathComponent)
-                                .lineLimit(1)
-                            Text(formatFileDate(for: file))
-                                .font(.caption)
-                                .foregroundColor(.gray)
+            List {
+                ForEach(inputFiles, id: \.self) { file in
+                    Button(action: {
+                        audioURL = file
+                        onSelectAudio(file)
+                    }) {
+                        HStack {
+                            Image(systemName: "music.note")
+                                .foregroundColor(.blue)
+                            VStack(alignment: .leading) {
+                                Text(file.lastPathComponent)
+                                    .lineLimit(1)
+                                Text(formatFileDate(for: file))
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                            }
+                            Spacer()
+                            Image(systemName: "play.circle.fill")
+                                .foregroundColor(.blue)
+                                .font(.title2)
                         }
-                        Spacer()
-                        Image(systemName: "play.circle.fill")
-                            .foregroundColor(.blue)
-                            .font(.title2)
+                        .contentShape(Rectangle())
                     }
-                    .contentShape(Rectangle())
+                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                        Button(role: .destructive) {
+                            fileToDelete = file
+                            showingDeleteAlert = true
+                        } label: {
+                            Label("删除", systemImage: "trash")
+                        }
+                    }
                 }
             }
             .navigationTitle("Input 文件夹")
@@ -37,6 +48,26 @@ struct InputFileListView: View {
                 dismiss()
             })
             .onAppear(perform: loadInputFiles)
+            .alert("确认删除", isPresented: $showingDeleteAlert) {
+                Button("取消", role: .cancel) {}
+                Button("删除", role: .destructive) {
+                    if let file = fileToDelete {
+                        deleteFile(at: file)
+                    }
+                }
+            } message: {
+                Text("确定要删除这个音频文件吗？")
+            }
+        }
+    }
+
+    private func deleteFile(at url: URL) {
+        do {
+            try FileManager.default.removeItem(at: url)
+            loadInputFiles() // 重新加载文件列表
+            print("Successfully deleted file: \(url.lastPathComponent)")
+        } catch {
+            print("Error deleting file: \(error)")
         }
     }
 
