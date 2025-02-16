@@ -14,9 +14,15 @@ struct InputFileListView: View {
     @State private var showingMoveSheet = false
     @State private var itemToMove: URL?
     @State private var selectedDestination: URL?
+    @State private var showingVideoPlayer = false
+    @State private var selectedVideo: URL?
+    @State private var showingRenameAlert = false
+    @State private var itemToRename: URL?
+    @State private var newItemName = ""
+    @State private var navigationPath = NavigationPath()
     
     var body: some View {
-        NavigationView {
+        NavigationStack(path: $navigationPath) {
             List {
                 if let current = currentDirectory {
                     Button(action: {
@@ -32,62 +38,71 @@ struct InputFileListView: View {
                 
                 ForEach(files, id: \.self) { url in
                     let isDirectory = AudioFileManager.shared.isDirectory(url: url)
-                    Button(action: {
-                        if isDirectory {
-                            currentDirectory = url
-                            loadFiles()
-                        } else if url.pathExtension.lowercased() == "mp3" {
-                            onSelect(url)
-                            audioURL = url
-                        }
-                    }) {
-                        HStack {
-                            Image(systemName: isDirectory ? "folder" : "music.note")
-                                .foregroundColor(isDirectory ? .blue : .blue)
-                            VStack(alignment: .leading) {
-                                Text(url.lastPathComponent)
-                                    .lineLimit(1)
-                                if !isDirectory {
-                                    Text(formatFileDate(for: url))
-                                        .font(.caption)
-                                        .foregroundColor(.gray)
+                    let isVideo = url.pathExtension.lowercased() == "mp4"
+                    let isAudio = url.pathExtension.lowercased() == "mp3"
+                    
+                    if isVideo {
+                        NavigationLink(value: url) {
+                            FileRowView(
+                                url: url,
+                                isDirectory: isDirectory,
+                                isVideo: isVideo,
+                                onDelete: {
+                                    itemToDelete = url
+                                    showingDeleteAlert = true
+                                },
+                                onMove: {
+                                    itemToMove = url
+                                    showingMoveSheet = true
+                                },
+                                onRename: {
+                                    itemToRename = url
+                                    newItemName = url.lastPathComponent
+                                    showingRenameAlert = true
                                 }
-                            }
-                            Spacer()
-                            if !isDirectory {
-                                Image(systemName: "play.circle.fill")
-                                    .foregroundColor(.blue)
-                                    .font(.title2)
-                            }
+                            )
                         }
-                    }
-                    .contextMenu {
-                        if isDirectory {
-                            Button(role: .destructive) {
-                                itemToDelete = url
-                                showingDeleteAlert = true
-                            } label: {
-                                Label("删除文件夹", systemImage: "trash")
+                    } else {
+                        Button(action: {
+                            if isDirectory {
+                                currentDirectory = url
+                                loadFiles()
+                            } else if isAudio {
+                                onSelect(url)
+                                audioURL = url
                             }
-                        } else {
-                            Button {
-                                itemToMove = url
-                                showingMoveSheet = true
-                            } label: {
-                                Label("移动到...", systemImage: "folder")
-                            }
-                            
-                            Button(role: .destructive) {
-                                itemToDelete = url
-                                showingDeleteAlert = true
-                            } label: {
-                                Label("删除文件", systemImage: "trash")
-                            }
+                        }) {
+                            FileRowView(
+                                url: url,
+                                isDirectory: isDirectory,
+                                isVideo: isVideo,
+                                onDelete: {
+                                    itemToDelete = url
+                                    showingDeleteAlert = true
+                                },
+                                onMove: {
+                                    itemToMove = url
+                                    showingMoveSheet = true
+                                },
+                                onRename: {
+                                    itemToRename = url
+                                    newItemName = url.lastPathComponent
+                                    showingRenameAlert = true
+                                }
+                            )
                         }
                     }
                 }
             }
             .navigationTitle(currentDirectory?.lastPathComponent ?? "音频文件")
+            .navigationDestination(for: URL.self) { url in
+                VideoPlayerView(
+                    videoURL: url,
+                    onSave: {
+                        navigationPath.removeLast()
+                    }
+                )
+            }
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button(action: {
@@ -137,6 +152,37 @@ struct InputFileListView: View {
                     Text("确定要删除\(isDirectory ? "文件夹" : "文件"): \(url.lastPathComponent) 吗？\(isDirectory ? "\n注意：文件夹内的所有内容都将被删除" : "")")
                 }
             }
+            .alert("重命名", isPresented: $showingRenameAlert) {
+                TextField("新名称", text: $newItemName)
+                Button("取消", role: .cancel) {
+                    newItemName = ""
+                    itemToRename = nil
+                }
+                Button("确定") {
+                    if let url = itemToRename,
+                       !newItemName.isEmpty {
+                        do {
+                            // 如果是文件，保持扩展名
+                            let newName = AudioFileManager.shared.isDirectory(url: url)
+                                ? newItemName
+                                : newItemName.hasSuffix(".mp3") || newItemName.hasSuffix(".mp4")
+                                    ? newItemName
+                                    : newItemName + (url.pathExtension.isEmpty ? "" : "." + url.pathExtension)
+                        
+                        try AudioFileManager.shared.rename(url, to: newName)
+                        newItemName = ""
+                        itemToRename = nil
+                        loadFiles()
+                    } catch {
+                        print("Error renaming item: \(error)")
+                    }
+                }
+            }
+            } message: {
+                if let url = itemToRename {
+                    Text("将\(AudioFileManager.shared.isDirectory(url: url) ? "文件夹" : "文件"): \(url.lastPathComponent) 重命名为:")
+                }
+            }
             .sheet(isPresented: $showingMoveSheet) {
                 FolderPickerView(
                     currentDirectory: nil,
@@ -182,6 +228,16 @@ struct InputFileListView: View {
             print("Error getting file date: \(error)")
         }
         return ""
+    }
+    
+    private func getFileIcon(isDirectory: Bool, isVideo: Bool) -> String {
+        if isDirectory {
+            return "folder"
+        } else if isVideo {
+            return "video"
+        } else {
+            return "music.note"
+        }
     }
 }
 
@@ -241,5 +297,81 @@ struct FolderPickerView: View {
     
     private func loadFolders() {
         files = AudioFileManager.shared.getContents(at: currentDirectory)
+    }
+}
+
+// 添加文件行视图组件
+struct FileRowView: View {
+    let url: URL
+    let isDirectory: Bool
+    let isVideo: Bool
+    var onDelete: () -> Void
+    var onMove: () -> Void
+    var onRename: () -> Void
+    
+    var body: some View {
+        HStack {
+            Image(systemName: getFileIcon(isDirectory: isDirectory, isVideo: isVideo))
+                .foregroundColor(isDirectory ? .blue : (isVideo ? .red : .blue))
+            VStack(alignment: .leading) {
+                Text(url.lastPathComponent)
+                    .lineLimit(1)
+                if !isDirectory {
+                    Text(formatFileDate(for: url))
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                }
+            }
+            Spacer()
+            if !isDirectory {
+                Image(systemName: isVideo ? "play.rectangle.fill" : "play.circle.fill")
+                    .foregroundColor(isVideo ? .red : .blue)
+                    .font(.title2)
+            }
+        }
+        .contextMenu {
+            if isDirectory {
+                Button(role: .destructive, action: onDelete) {
+                    Label("删除文件夹", systemImage: "trash")
+                }
+            } else {
+                Button(action: onMove) {
+                    Label("移动到...", systemImage: "folder")
+                }
+                
+                Button(action: onRename) {
+                    Label("重命名", systemImage: "pencil")
+                }
+                
+                Button(role: .destructive, action: onDelete) {
+                    Label(isVideo ? "删除视频" : "删除文件", systemImage: "trash")
+                }
+            }
+        }
+    }
+    
+    private func getFileIcon(isDirectory: Bool, isVideo: Bool) -> String {
+        if isDirectory {
+            return "folder"
+        } else if isVideo {
+            return "video"
+        } else {
+            return "music.note"
+        }
+    }
+    
+    private func formatFileDate(for file: URL) -> String {
+        do {
+            let resources = try file.resourceValues(forKeys: [.contentModificationDateKey])
+            if let date = resources.contentModificationDate {
+                let formatter = DateFormatter()
+                formatter.dateStyle = .medium
+                formatter.timeStyle = .short
+                return formatter.string(from: date)
+            }
+        } catch {
+            print("Error getting file date: \(error)")
+        }
+        return ""
     }
 } 

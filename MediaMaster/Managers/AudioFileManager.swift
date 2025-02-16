@@ -189,4 +189,28 @@ class AudioFileManager {
         fileManager.fileExists(atPath: url.path, isDirectory: &isDirectory)
         return isDirectory.boolValue
     }
+    
+    // 重命名文件或文件夹
+    func rename(_ url: URL, to newName: String) throws {
+        let parentURL = url.deletingLastPathComponent()
+        let newURL = parentURL.appendingPathComponent(newName)
+        
+        // 检查新名称是否已存在
+        if fileManager.fileExists(atPath: newURL.path) {
+            throw NSError(
+                domain: "AudioFileManager",
+                code: -1,
+                userInfo: [NSLocalizedDescriptionKey: "该名称已存在"]
+            )
+        }
+        
+        do {
+            try fileManager.moveItem(at: url, to: newURL)
+            print("Successfully renamed from: \(url.lastPathComponent) to: \(newName)")
+            notifyFolderChanged()
+        } catch {
+            print("Error renaming item: \(error)")
+            throw error
+        }
+    }
 } 
