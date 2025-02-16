@@ -6,6 +6,8 @@ struct VideoPlayerView: View {
     let videoURL: URL
     var onSave: () -> Void
     
+    @State private var showingSaveAlert = false
+    
     var body: some View {
         ZStack {
             VideoPlayer(player: viewModel.playerInstance)
@@ -22,9 +24,52 @@ struct VideoPlayerView: View {
                     isPlaying: $viewModel.isPlaying,
                     onSeek: viewModel.seek(to:),
                     onPlayPause: viewModel.togglePlayback,
-                    onSave: onSave
+                    onSave: {
+                        showingSaveAlert = true
+                    }
                 )
             }
+        }
+        .alert("保存视频", isPresented: $showingSaveAlert) {
+            Button("取消", role: .cancel) { }
+            Button("保存到相册") {
+                onSave()
+            }
+            Button("保存到 Input") {
+                saveToInput()
+            }
+        } message: {
+            Text("选择保存位置")
+        }
+    }
+    
+    private func saveToInput() {
+        do {
+            let fileManager = FileManager.default
+            let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+            let inputDirectoryURL = documentsURL.appendingPathComponent("Input")
+            
+            // 确保 Input 目录存在
+            if !fileManager.fileExists(atPath: inputDirectoryURL.path) {
+                try fileManager.createDirectory(at: inputDirectoryURL, withIntermediateDirectories: true)
+            }
+            
+            // 生成唯一文件名
+            let timestamp = Int(Date().timeIntervalSince1970)
+            let fileName = "merged_video_\(timestamp).mp4"
+            let destinationURL = inputDirectoryURL.appendingPathComponent(fileName)
+            
+            // 复制文件
+            try fileManager.copyItem(at: videoURL, to: destinationURL)
+            print("Successfully saved video to Input folder: \(destinationURL.path)")
+            
+            // 通知文件夹内容变化
+            NotificationCenter.default.post(
+                name: AudioFileManager.folderChangedNotification,
+                object: nil
+            )
+        } catch {
+            print("Error saving video to Input folder: \(error)")
         }
     }
 }
