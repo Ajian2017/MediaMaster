@@ -69,13 +69,6 @@ struct VideoPlayerView: View {
                         onPlayPause: viewModel.togglePlayback,
                         onSave: { showingSaveAlert = true }
                     )
-                    Button(action: shareFile) {
-                        Text("分享")
-                            .padding()
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
-                    }
                 }
             )
             .alert("保存视频", isPresented: $showingSaveAlert) {
@@ -113,32 +106,6 @@ struct VideoPlayerView: View {
             )
         } catch {
             print("Error saving video to Input folder: \(error)")
-        }
-    }
-    
-    private func shareFile() {
-        guard let fileToShare = selectedFileToShare else {
-            print("No file selected to share") // Debugging line
-            return
-        }
-        
-        // Check if the file exists
-        if !FileManager.default.fileExists(atPath: fileToShare.path) {
-            print("File does not exist at path: \(fileToShare.path)") // Debugging line
-            return
-        }
-        
-        print("Sharing file: \(fileToShare)") // Debugging line
-        let activityViewController = UIActivityViewController(activityItems: [fileToShare], applicationActivities: nil)
-        
-        // Present the activity view controller on the main thread
-        DispatchQueue.main.async {
-            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-               let rootViewController = windowScene.windows.first?.rootViewController {
-                rootViewController.present(activityViewController, animated: true, completion: nil)
-            } else {
-                print("Could not find root view controller") // Debugging line
-            }
         }
     }
 }
