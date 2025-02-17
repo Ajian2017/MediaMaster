@@ -25,7 +25,7 @@ struct InputFileListView: View {
     var body: some View {
         NavigationStack(path: $navigationPath) {
             List {
-                if let current = currentDirectory {
+                if let current = currentDirectory, current.lastPathComponent != Constants.inputDirectoryName {
                     Button(action: {
                         currentDirectory = current.deletingLastPathComponent()
                         loadFiles()
@@ -122,7 +122,7 @@ struct InputFileListView: View {
                     }
                 }
             }
-            .navigationTitle(currentDirectory?.lastPathComponent ?? "文件管理")
+            .navigationTitle(currentDirectory?.lastPathComponent ?? "文件中心")
             .navigationDestination(for: URL.self) { url in
                 if url.pathExtension.lowercased() == "pdf" {
                     PDFViewer(url: url)

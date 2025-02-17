@@ -11,7 +11,7 @@ class AudioPlayerViewModel: ObservableObject {
     @Published var isReady = false
     @Published var playlist: [URL] = []  // 添加播放列表
     
-    private var player: AVPlayer?
+    var player: AVPlayer?
     private var timeObserver: Any?
     private var currentIndex: Int = 0
     private var isShuttingDown = false  // 添加标志以防止重复清理
@@ -46,7 +46,7 @@ class AudioPlayerViewModel: ObservableObject {
     private func loadPlaylist(_ url: URL? = nil) {
         let fileManager = FileManager.default
         let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let inputDirectoryURL = url?.deletingLastPathComponent() ?? documentsURL.appendingPathComponent("Input")
+        let inputDirectoryURL = url?.deletingLastPathComponent() ?? documentsURL.appendingPathComponent(Constants.inputDirectoryName)
         
         do {
             let files = try fileManager.contentsOfDirectory(

@@ -84,7 +84,7 @@ struct VideoPlayerView: View {
         do {
             let fileManager = FileManager.default
             let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-            let inputDirectoryURL = documentsURL.appendingPathComponent("Input")
+            let inputDirectoryURL = documentsURL.appendingPathComponent(Constants.inputDirectoryName)
             
             // 确保 Input 目录存在
             if !fileManager.fileExists(atPath: inputDirectoryURL.path) {

@@ -12,6 +12,7 @@
 		D124523D2D619F0000CCB7C6 /* MainContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D124523C2D619F0000CCB7C6 /* MainContentView.swift */; };
 		D14401552D62EA130087379D /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = D14401542D62EA130087379D /* readme.md */; };
 		D14401592D630EC50087379D /* PDFFileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14401582D630EC50087379D /* PDFFileView.swift */; };
+		D15C22A82D636D78004F741D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D15C22A72D636D78004F741D /* Constants.swift */; };
 		D1AA33B32D5D9D68006219EC /* MediaMasterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AA33B22D5D9D68006219EC /* MediaMasterApp.swift */; };
 		D1AA33B72D5D9D69006219EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D1AA33B62D5D9D69006219EC /* Assets.xcassets */; };
 		D1AA33BA2D5D9D69006219EC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D1AA33B92D5D9D69006219EC /* Preview Assets.xcassets */; };
@@ -35,6 +36,7 @@
 		D124523C2D619F0000CCB7C6 /* MainContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainContentView.swift; sourceTree = "<group>"; };
 		D14401542D62EA130087379D /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
 		D14401582D630EC50087379D /* PDFFileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFFileView.swift; sourceTree = "<group>"; };
+		D15C22A72D636D78004F741D /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		D1AA33AF2D5D9D68006219EC /* MediaMaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MediaMaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1AA33B22D5D9D68006219EC /* MediaMasterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaMasterApp.swift; sourceTree = "<group>"; };
 		D1AA33B62D5D9D69006219EC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 		D1AA33B12D5D9D68006219EC /* MediaMaster */ = {
 			isa = PBXGroup;
 			children = (
+				D15C22A72D636D78004F741D /* Constants.swift */,
 				D1AA33DD2D5F7476006219EC /* Info.plist */,
 				D1AA33D12D5E59DE006219EC /* Managers */,
 				D1AA33CB2D5E597B006219EC /* ViewModels */,
@@ -281,6 +284,7 @@
 				D1AA33B32D5D9D68006219EC /* MediaMasterApp.swift in Sources */,
 				D1AA33CC2D5E597B006219EC /* ContentView.swift in Sources */,
 				D1E3BBD42D61A942006D0B38 /* AudioFileManager.swift in Sources */,
+				D15C22A82D636D78004F741D /* Constants.swift in Sources */,
 				D1AA33DA2D5F6440006219EC /* AudioPlayerView.swift in Sources */,
 				D1AA33D22D5E59DE006219EC /* PhotoLibraryManager.swift in Sources */,
 				D1AA33CF2D5E597B006219EC /* VideoPlayerViewModel.swift in Sources */,

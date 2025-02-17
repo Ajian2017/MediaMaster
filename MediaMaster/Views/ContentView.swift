@@ -44,7 +44,7 @@ struct ContentView: View {
     }
     
     var body: some View {
-        if isAudioMinimized, let url = currentAudio {
+        if isAudioMinimized, let url = currentAudio, let player = audioViewModel.player {
             MinimizedAudioPlayer(
                 audioURL: url,
                 isMinimized: $isAudioMinimized,
