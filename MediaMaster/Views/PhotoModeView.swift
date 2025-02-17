@@ -59,22 +59,35 @@ struct PhotoModeView: View {
         .sheet(isPresented: $showingShareSheet) {
             if let pdfData = pdfData {
                 ShareSheet(items: [pdfData])
+                    .onAppear {
+                        print("ShareSheet is now appearing.")
+                    }
+            } else {
+                Text("PDF data is unavailable.")
+                    .padding()
+            }
+        }.onChange(of: pdfData) { _, newPdfData in
+            if newPdfData != nil {
+                showingShareSheet = true
             }
         }
     }
     
     private func createAndSharePDF() {
         let pdfDocument = PDFDocument()
-        
+
         for (index, image) in selectedImages.enumerated() {
             if let page = PDFPage(image: image) {
                 pdfDocument.insert(page, at: index)
             }
         }
-        
+
         if let data = pdfDocument.dataRepresentation() {
-            pdfData = data
-            showingShareSheet = true
+            print("PDF data generated successfully.")
+            pdfData = data  // Update pdfData
+        } else {
+            print("Failed to generate PDF data.")
+            showingShareSheet = false  // Reset the flag if PDF data generation fails
         }
     }
 }
@@ -87,4 +100,4 @@ struct ShareSheet: UIViewControllerRepresentable {
     }
     
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
-} 
+}
