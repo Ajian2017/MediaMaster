@@ -26,7 +26,7 @@ MediaMaster is an iOS application designed for video and audio management, allow
    ```bash
    open MediaMaster.xcworkspace
    ```
-   3. Build and run the project on a simulator or a physical device.
+3. Build and run the project on a simulator or a physical device.
 
 ## Usage
 
