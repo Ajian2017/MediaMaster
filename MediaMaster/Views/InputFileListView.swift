@@ -44,13 +44,10 @@ struct InputFileListView: View {
                                 navigationPath.append(file)
                             }
                             .contextMenu {
-                                Button(action: {
-                                    selectedFileToShare = file
-                                    shareFile()
-                                }) {
-                                    Text("分享")
-                                    Image(systemName: "square.and.arrow.up")
-                                }
+                                shareButton(for: file)
+                                deleteButton(for: file)
+                                renameButton(for: file)
+                                moveButton(for: file)
                             }
                     } else {
                         let isDirectory = AudioFileManager.shared.isDirectory(url: file)
@@ -106,6 +103,12 @@ struct InputFileListView: View {
                                         showingRenameAlert = true
                                     }
                                 )
+                            }
+                            .contextMenu {
+                                shareButton(for: file)
+                                deleteButton(for: file)
+                                renameButton(for: file)
+                                moveButton(for: file)
                             }
                         }
                     }
@@ -258,6 +261,43 @@ struct InputFileListView: View {
             return "video"
         } else {
             return "music.note"
+        }
+    }
+    
+    private func shareButton(for file: URL) -> some View {
+        Button(action: {
+            selectedFileToShare = file
+            shareFile()
+        }) {
+            Label("分享", systemImage: "square.and.arrow.up")
+        }
+    }
+    
+    private func deleteButton(for file: URL) -> some View {
+        Button(role: .destructive, action: {
+            itemToDelete = file
+            showingDeleteAlert = true
+        }) {
+            Label("删除", systemImage: "trash")
+        }
+    }
+    
+    private func renameButton(for file: URL) -> some View {
+        Button(action: {
+            itemToRename = file
+            newItemName = file.lastPathComponent
+            showingRenameAlert = true
+        }) {
+            Label("重命名", systemImage: "pencil")
+        }
+    }
+    
+    private func moveButton(for file: URL) -> some View {
+        Button(action: {
+            itemToMove = file
+            showingMoveSheet = true
+        }) {
+            Label("移动到...", systemImage: "folder")
         }
     }
     
