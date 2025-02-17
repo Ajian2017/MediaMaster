@@ -72,6 +72,10 @@ struct InputFileListView: View {
                                         itemToRename = file
                                         newItemName = file.lastPathComponent
                                         showingRenameAlert = true
+                                    },
+                                    onShare: {
+                                        selectedFileToShare = file
+                                        shareFile()
                                     }
                                 )
                             }
@@ -101,6 +105,10 @@ struct InputFileListView: View {
                                         itemToRename = file
                                         newItemName = file.lastPathComponent
                                         showingRenameAlert = true
+                                    },
+                                    onShare: {
+                                        selectedFileToShare = file
+                                        shareFile()
                                     }
                                 )
                             }
@@ -395,6 +403,7 @@ struct FileRowView: View {
     var onDelete: () -> Void
     var onMove: () -> Void
     var onRename: () -> Void
+    var onShare: () -> Void
     
     var body: some View {
         HStack {
@@ -422,6 +431,10 @@ struct FileRowView: View {
                     Label("删除文件夹", systemImage: "trash")
                 }
             } else {
+                Button(action: onShare) {
+                    Label("分享", systemImage: "square.and.arrow.up")
+                }
+                
                 Button(action: onMove) {
                     Label("移动到...", systemImage: "folder")
                 }
