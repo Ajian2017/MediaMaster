@@ -44,6 +44,21 @@ struct ContentView: View {
     }
     
     var body: some View {
+        if isAudioMinimized, let url = currentAudio {
+            MinimizedAudioPlayer(
+                audioURL: url,
+                isMinimized: $isAudioMinimized,
+                viewModel: audioViewModel,
+                onTap: { activeSheet = .audioPlayer(url) },
+                onClose: {
+                    audioViewModel.cleanup()
+                    currentAudio = nil
+                    isAudioMinimized = false
+                }
+            )
+            .transition(.move(edge: .bottom))
+            .ignoresSafeArea(.all, edges: .bottom)
+        }
         TabView {
             homeView.tabItem {
                 Label("Home", systemImage: "house")
@@ -64,22 +79,6 @@ struct ContentView: View {
                     .navigationTitle(isVideoMode ? "视频合并" : "合并照片为PDF")
                     .padding(.bottom, isAudioMinimized ? 80 : 0)
                     .animation(.easeInOut, value: isAudioMinimized)
-                
-                if isAudioMinimized, let url = currentAudio {
-                    MinimizedAudioPlayer(
-                        audioURL: url,
-                        isMinimized: $isAudioMinimized,
-                        viewModel: audioViewModel,
-                        onTap: { activeSheet = .audioPlayer(url) },
-                        onClose: {
-                            audioViewModel.cleanup()
-                            currentAudio = nil
-                            isAudioMinimized = false
-                        }
-                    )
-                    .transition(.move(edge: .bottom))
-                    .ignoresSafeArea(.all, edges: .bottom)
-                }
             }
             .sheet(item: $activeSheet) { sheetContent($0) }
         }
@@ -101,7 +100,7 @@ struct ContentView: View {
     }
         
     @ViewBuilder
-    private func sheetContent(_ sheet: ActiveSheet) -> some View {
+    func sheetContent(_ sheet: ActiveSheet) -> some View {
         switch sheet {
         case .videoPreview(let url):
             VideoPlayerView(videoURL: url) {
@@ -116,15 +115,10 @@ struct ContentView: View {
                     currentAudio = url
                 }
             )
-//        case .inputFileList:
-//            InputFileListView(audioURL: $audioURL) { url in
-//                currentAudio = url
-//                activeSheet = .audioPlayer(url)
-//            }
         }
     }
     
-    private func handleSelectedItems(_ newItems: [PhotosPickerItem]) {
+    func handleSelectedItems(_ newItems: [PhotosPickerItem]) {
         Task {
             selectedVideos = []
             for item in newItems {
@@ -135,7 +129,7 @@ struct ContentView: View {
         }
     }
     
-    private func handleDrop(_ providers: [NSItemProvider]) -> Bool {
+    func handleDrop(_ providers: [NSItemProvider]) -> Bool {
         for provider in providers {
             if provider.canLoadObject(ofClass: URL.self) {
                 provider.loadObject(ofClass: URL.self) { (url, error) in

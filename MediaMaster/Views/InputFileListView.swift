@@ -142,10 +142,6 @@ struct InputFileListView: View {
                     }) {
                         Image(systemName: "folder.badge.plus")
                     }
-                    
-                    Button("关闭") {
-                        dismiss()
-                    }
                 }
             }
             .alert("新建文件夹", isPresented: $showingNewFolderAlert) {
