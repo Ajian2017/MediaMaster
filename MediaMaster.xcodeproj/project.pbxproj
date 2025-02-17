@@ -11,6 +11,7 @@
 		D124523B2D6193D000CCB7C6 /* InputFileListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D124523A2D6193D000CCB7C6 /* InputFileListView.swift */; };
 		D124523D2D619F0000CCB7C6 /* MainContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D124523C2D619F0000CCB7C6 /* MainContentView.swift */; };
 		D14401552D62EA130087379D /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = D14401542D62EA130087379D /* readme.md */; };
+		D14401592D630EC50087379D /* PDFFileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14401582D630EC50087379D /* PDFFileView.swift */; };
 		D1AA33B32D5D9D68006219EC /* MediaMasterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AA33B22D5D9D68006219EC /* MediaMasterApp.swift */; };
 		D1AA33B72D5D9D69006219EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D1AA33B62D5D9D69006219EC /* Assets.xcassets */; };
 		D1AA33BA2D5D9D69006219EC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D1AA33B92D5D9D69006219EC /* Preview Assets.xcassets */; };
@@ -33,6 +34,7 @@
 		D124523A2D6193D000CCB7C6 /* InputFileListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputFileListView.swift; sourceTree = "<group>"; };
 		D124523C2D619F0000CCB7C6 /* MainContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainContentView.swift; sourceTree = "<group>"; };
 		D14401542D62EA130087379D /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
+		D14401582D630EC50087379D /* PDFFileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFFileView.swift; sourceTree = "<group>"; };
 		D1AA33AF2D5D9D68006219EC /* MediaMaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MediaMaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1AA33B22D5D9D68006219EC /* MediaMasterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaMasterApp.swift; sourceTree = "<group>"; };
 		D1AA33B62D5D9D69006219EC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 		D1AA33C82D5E597B006219EC /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D14401582D630EC50087379D /* PDFFileView.swift */,
 				D124523C2D619F0000CCB7C6 /* MainContentView.swift */,
 				D124523A2D6193D000CCB7C6 /* InputFileListView.swift */,
 				D1AA33D92D5F6440006219EC /* AudioPlayerView.swift */,
@@ -282,6 +285,7 @@
 				D1AA33D22D5E59DE006219EC /* PhotoLibraryManager.swift in Sources */,
 				D1AA33CF2D5E597B006219EC /* VideoPlayerViewModel.swift in Sources */,
 				D1AA33DC2D5F66DC006219EC /* AudioPlayerViewModel.swift in Sources */,
+				D14401592D630EC50087379D /* PDFFileView.swift in Sources */,
 				D1AA33D72D5E5AC3006219EC /* VideoModeView.swift in Sources */,
 				D1AA33CE2D5E597B006219EC /* VideoMergerViewModel.swift in Sources */,
 				D1AA33CD2D5E597B006219EC /* VideoPlayerView.swift in Sources */,

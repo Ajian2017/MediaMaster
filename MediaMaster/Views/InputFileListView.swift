@@ -36,72 +36,83 @@ struct InputFileListView: View {
                     }
                 }
                 
-                ForEach(files, id: \.self) { url in
-                    let isDirectory = AudioFileManager.shared.isDirectory(url: url)
-                    let isVideo = url.pathExtension.lowercased() == "mp4"
-                    let isAudio = url.pathExtension.lowercased() == "mp3"
-                    
-                    if isVideo {
-                        NavigationLink(value: url) {
-                            FileRowView(
-                                url: url,
-                                isDirectory: isDirectory,
-                                isVideo: isVideo,
-                                onDelete: {
-                                    itemToDelete = url
-                                    showingDeleteAlert = true
-                                },
-                                onMove: {
-                                    itemToMove = url
-                                    showingMoveSheet = true
-                                },
-                                onRename: {
-                                    itemToRename = url
-                                    newItemName = url.lastPathComponent
-                                    showingRenameAlert = true
-                                }
-                            )
-                        }
-                    } else {
-                        Button(action: {
-                            if isDirectory {
-                                currentDirectory = url
-                                loadFiles()
-                            } else if isAudio {
-                                onSelect(url)
-                                audioURL = url
+                ForEach(files, id: \.self) { file in
+                    if file.pathExtension.lowercased() == "pdf" {
+                        PDFFileView(url: file)
+                            .onTapGesture {
+                                navigationPath.append(file)
                             }
-                        }) {
-                            FileRowView(
-                                url: url,
-                                isDirectory: isDirectory,
-                                isVideo: isVideo,
-                                onDelete: {
-                                    itemToDelete = url
-                                    showingDeleteAlert = true
-                                },
-                                onMove: {
-                                    itemToMove = url
-                                    showingMoveSheet = true
-                                },
-                                onRename: {
-                                    itemToRename = url
-                                    newItemName = url.lastPathComponent
-                                    showingRenameAlert = true
+                    } else {
+                        let isDirectory = AudioFileManager.shared.isDirectory(url: file)
+                        let isVideo = file.pathExtension.lowercased() == "mp4"
+                        let isAudio = file.pathExtension.lowercased() == "mp3"
+                        
+                        if isVideo {
+                            NavigationLink(value: file) {
+                                FileRowView(
+                                    url: file,
+                                    isDirectory: isDirectory,
+                                    isVideo: isVideo,
+                                    onDelete: {
+                                        itemToDelete = file
+                                        showingDeleteAlert = true
+                                    },
+                                    onMove: {
+                                        itemToMove = file
+                                        showingMoveSheet = true
+                                    },
+                                    onRename: {
+                                        itemToRename = file
+                                        newItemName = file.lastPathComponent
+                                        showingRenameAlert = true
+                                    }
+                                )
+                            }
+                        } else {
+                            Button(action: {
+                                if isDirectory {
+                                    currentDirectory = file
+                                    loadFiles()
+                                } else if isAudio {
+                                    onSelect(file)
+                                    audioURL = file
                                 }
-                            )
+                            }) {
+                                FileRowView(
+                                    url: file,
+                                    isDirectory: isDirectory,
+                                    isVideo: isVideo,
+                                    onDelete: {
+                                        itemToDelete = file
+                                        showingDeleteAlert = true
+                                    },
+                                    onMove: {
+                                        itemToMove = file
+                                        showingMoveSheet = true
+                                    },
+                                    onRename: {
+                                        itemToRename = file
+                                        newItemName = file.lastPathComponent
+                                        showingRenameAlert = true
+                                    }
+                                )
+                            }
                         }
                     }
                 }
             }
             .navigationTitle(currentDirectory?.lastPathComponent ?? "音频文件")
             .navigationDestination(for: URL.self) { url in
-                VideoPlayerView(
-                    videoURL: url,
-                    onSave: {
-                        navigationPath.removeLast()
-                    }
-                )
+                if url.pathExtension.lowercased() == "pdf" {
+                    PDFViewer(url: url)
+                } else {
+                    VideoPlayerView(
+                        videoURL: url,
+                        onSave: {
+                            navigationPath.removeLast()
+                        }
+                    )
+                }
             }
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
