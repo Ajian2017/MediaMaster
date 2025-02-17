@@ -10,6 +10,7 @@
 		AA4535B048A19608143DD2C8 /* Pods_MediaMaster.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B79D3D3C7D587EFA9798F2E4 /* Pods_MediaMaster.framework */; };
 		D124523B2D6193D000CCB7C6 /* InputFileListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D124523A2D6193D000CCB7C6 /* InputFileListView.swift */; };
 		D124523D2D619F0000CCB7C6 /* MainContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D124523C2D619F0000CCB7C6 /* MainContentView.swift */; };
+		D14401552D62EA130087379D /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = D14401542D62EA130087379D /* readme.md */; };
 		D1AA33B32D5D9D68006219EC /* MediaMasterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AA33B22D5D9D68006219EC /* MediaMasterApp.swift */; };
 		D1AA33B72D5D9D69006219EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D1AA33B62D5D9D69006219EC /* Assets.xcassets */; };
 		D1AA33BA2D5D9D69006219EC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D1AA33B92D5D9D69006219EC /* Preview Assets.xcassets */; };
@@ -31,6 +32,7 @@
 		B79D3D3C7D587EFA9798F2E4 /* Pods_MediaMaster.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MediaMaster.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D124523A2D6193D000CCB7C6 /* InputFileListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputFileListView.swift; sourceTree = "<group>"; };
 		D124523C2D619F0000CCB7C6 /* MainContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainContentView.swift; sourceTree = "<group>"; };
+		D14401542D62EA130087379D /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
 		D1AA33AF2D5D9D68006219EC /* MediaMaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MediaMaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1AA33B22D5D9D68006219EC /* MediaMasterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaMasterApp.swift; sourceTree = "<group>"; };
 		D1AA33B62D5D9D69006219EC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 				D1AA33B22D5D9D68006219EC /* MediaMasterApp.swift */,
 				D1AA33B62D5D9D69006219EC /* Assets.xcassets */,
 				D1AA33B82D5D9D69006219EC /* Preview Content */,
+				D14401542D62EA130087379D /* readme.md */,
 			);
 			path = MediaMaster;
 			sourceTree = "<group>";
@@ -214,6 +217,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D1AA33BA2D5D9D69006219EC /* Preview Assets.xcassets in Resources */,
+				D14401552D62EA130087379D /* readme.md in Resources */,
 				D1AA33B72D5D9D69006219EC /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
