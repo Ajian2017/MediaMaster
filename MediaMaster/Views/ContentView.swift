@@ -94,8 +94,7 @@ struct ContentView: View {
         MainContentView(
             isVideoMode: $isVideoMode,
             selectedItems: $selectedItems,
-            selectedVideos: $selectedVideos,
-            onMerge: mergeVideos
+            selectedVideos: $selectedVideos
         )
     }
         

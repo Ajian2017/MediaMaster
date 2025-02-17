@@ -3,7 +3,7 @@ import AVFoundation
 
 struct VideoModeView: View {
     @Binding var selectedVideos: [AVAsset]
-    let onMerge: () -> Void
+    @ObservedObject var viewModel: VideoMergerViewModel
     
     var body: some View {
         VStack {
@@ -19,7 +19,11 @@ struct VideoModeView: View {
                     .padding()
                 
                 // 合并视频按钮
-                Button(action: onMerge) {
+                Button(action: {
+                    Task {
+                        await viewModel.mergeVideos(selectedVideos)
+                    }
+                }) {
                     Label("合并视频", systemImage: "film.stack")
                         .padding()
                         .frame(maxWidth: .infinity)
@@ -29,6 +33,13 @@ struct VideoModeView: View {
                         .padding(.horizontal)
                 }
                 .disabled(selectedVideos.count < 2)
+                
+                // Show progress indicator
+                if viewModel.isExporting {
+                    ProgressView("合并中...", value: viewModel.progress, total: 100)
+                        .progressViewStyle(LinearProgressViewStyle())
+                        .padding()
+                }
             }
             Spacer()
         }

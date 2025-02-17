@@ -7,11 +7,13 @@ class VideoMergerViewModel: ObservableObject {
     @Published var exportedVideoURL: URL?
     @Published var alertMessage = ""
     @Published var showAlert = false
+    @Published var progress: Double = 0.0
     
     func mergeVideos(_ videos: [AVAsset]) async {
         guard videos.count >= 2 else { return }
         
         isExporting = true
+        progress = 0.0
         
         do {
             let tempDirURL = FileManager.default.temporaryDirectory
@@ -78,15 +80,19 @@ class VideoMergerViewModel: ObservableObject {
                             return
                         }
                         
-                        if let session = session,
-                           let returnCode = session.getReturnCode(),
-                           returnCode.isValueSuccess() {
-                            self.exportedVideoURL = outputURL
-                            print("Successfully merged videos")
-                        } else {
-                            print("FFmpeg Merge Error: \(session?.getLogsAsString() ?? "Unknown error")")
-                            self.alertMessage = "视频合并失败：\(session?.getLogsAsString() ?? "未知错误")"
-                            self.showAlert = true
+                        if let session = session {
+                            let logs = session.getLogsAsString() ?? ""
+                            self.updateProgress(from: logs)
+                            
+                            if let returnCode = session.getReturnCode(),
+                               returnCode.isValueSuccess() {
+                                self.exportedVideoURL = outputURL
+                                print("Successfully merged videos")
+                            } else {
+                                print("FFmpeg Merge Error: \(session.getLogsAsString() ?? "Unknown error")")
+                                self.alertMessage = "视频合并失败：\(session.getLogsAsString() ?? "未知错误")"
+                                self.showAlert = true
+                            }
                         }
                         
                         try? FileManager.default.removeItem(at: tempDirURL)
@@ -101,6 +107,21 @@ class VideoMergerViewModel: ObservableObject {
             alertMessage = "准备合并失败：\(error.localizedDescription)"
             showAlert = true
             isExporting = false
+        }
+    }
+    
+    private func updateProgress(from logs: String) {
+        let progressPattern = "time=(\\d+\\.\\d+)"
+        let regex = try? NSRegularExpression(pattern: progressPattern, options: [])
+        let nsString = logs as NSString
+        let results = regex?.matches(in: logs, options: [], range: NSRange(location: 0, length: nsString.length))
+        
+        if let match = results?.last, let range = Range(match.range(at: 1), in: logs) {
+            let timeString = String(logs[range])
+            if let time = Double(timeString) {
+                let totalDuration = 10.0 // Replace with actual duration if available
+                self.progress = min(time / totalDuration * 100.0, 100.0)
+            }
         }
     }
 } 

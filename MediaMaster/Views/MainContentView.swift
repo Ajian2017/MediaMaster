@@ -6,7 +6,18 @@ struct MainContentView: View {
     @Binding var isVideoMode: Bool
     @Binding var selectedItems: [PhotosPickerItem]
     @Binding var selectedVideos: [AVAsset]
-    let onMerge: () -> Void
+    @StateObject private var videoMergerViewModel = VideoMergerViewModel()
+    @State private var activeSheet: ActiveSheet? = nil
+    
+    enum ActiveSheet: Identifiable {
+        case videoPreview(URL)
+        
+        var id: Int {
+            switch self {
+            case .videoPreview: return 1
+            }
+        }
+    }
     
     var body: some View {
         VStack {
@@ -15,7 +26,7 @@ struct MainContentView: View {
             if isVideoMode {
                 VideoModeView(
                     selectedVideos: $selectedVideos,
-                    onMerge: onMerge
+                    viewModel: videoMergerViewModel
                 )
             } else {
                 PhotoModeView(selectedItems: $selectedItems)
@@ -33,6 +44,22 @@ struct MainContentView: View {
                     .foregroundColor(.white)
                     .cornerRadius(10)
                     .padding(.horizontal)
+            }
+        }
+        .onChange(of: videoMergerViewModel.exportedVideoURL) { url in
+            if let url = url {
+                activeSheet = .videoPreview(url) // Open the merged video
+            }
+        }
+        .sheet(item: $activeSheet) { sheetContent($0) }
+    }
+    
+    @ViewBuilder
+    private func sheetContent(_ sheet: ActiveSheet) -> some View {
+        switch sheet {
+        case .videoPreview(let url):
+            VideoPlayerView(videoURL: url) {
+                // Handle any actions after video playback
             }
         }
     }
