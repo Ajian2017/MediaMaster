@@ -74,7 +74,7 @@ struct VideoPlayerView: View {
             .alert("保存视频", isPresented: $showingSaveAlert) {
                 Button("取消", role: .cancel) { }
                 Button("保存到相册") { onSave() }
-                Button("保存到 Input") { saveToInput() }
+                Button("保存到文件中心") { saveToInput() }
             } message: {
                 Text("选择保存位置")
             }

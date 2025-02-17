@@ -34,23 +34,34 @@ struct ContentView: View {
     enum ActiveSheet: Identifiable {
         case videoPreview(URL)
         case audioPlayer(URL)
-        case inputFileList
         
         var id: Int {
             switch self {
             case .videoPreview: return 1
             case .audioPlayer: return 2
-            case .inputFileList: return 3
             }
         }
     }
     
     var body: some View {
+        TabView {
+            homeView.tabItem {
+                Label("Home", systemImage: "house")
+            }
+            InputFileListView(audioURL: $audioURL) { url in
+                currentAudio = url
+                activeSheet = .audioPlayer(url)
+            }.tabItem {
+                Label("File Center", systemImage: "folder")
+            }
+        }
+    }
+        
+    var homeView: some View {
         NavigationStack {
             ZStack(alignment: .bottom) {
                 mainContent
-                    .navigationTitle(isVideoMode ? "视频合并" : "相册浏览")
-                    .toolbar { toolbarContent }
+                    .navigationTitle(isVideoMode ? "视频合并" : "合并照片为PDF")
                     .padding(.bottom, isAudioMinimized ? 80 : 0)
                     .animation(.easeInOut, value: isAudioMinimized)
                 
@@ -88,18 +99,7 @@ struct ContentView: View {
             onMerge: mergeVideos
         )
     }
-    
-    private var toolbarContent: some ToolbarContent {
-        ToolbarItem(placement: .navigationBarTrailing) {
-            Button(action: {
-                activeSheet = .inputFileList
-            }) {
-                Image(systemName: "folder")
-                    .foregroundColor(.blue)
-            }
-        }
-    }
-    
+        
     @ViewBuilder
     private func sheetContent(_ sheet: ActiveSheet) -> some View {
         switch sheet {
@@ -116,11 +116,11 @@ struct ContentView: View {
                     currentAudio = url
                 }
             )
-        case .inputFileList:
-            InputFileListView(audioURL: $audioURL) { url in
-                currentAudio = url
-                activeSheet = .audioPlayer(url)
-            }
+//        case .inputFileList:
+//            InputFileListView(audioURL: $audioURL) { url in
+//                currentAudio = url
+//                activeSheet = .audioPlayer(url)
+//            }
         }
     }
     
@@ -182,7 +182,7 @@ struct ContentView: View {
         ) { notification in
             if let url = notification.object as? URL {
                 audioURL = url
-                activeSheet = .inputFileList
+                activeSheet = .audioPlayer(url)
             }
         }
     }

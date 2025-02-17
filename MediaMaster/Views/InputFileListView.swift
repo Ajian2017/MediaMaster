@@ -122,7 +122,7 @@ struct InputFileListView: View {
                     }
                 }
             }
-            .navigationTitle(currentDirectory?.lastPathComponent ?? "音频文件")
+            .navigationTitle(currentDirectory?.lastPathComponent ?? "文件管理")
             .navigationDestination(for: URL.self) { url in
                 if url.pathExtension.lowercased() == "pdf" {
                     PDFViewer(url: url)
