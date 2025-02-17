@@ -8,12 +8,18 @@ class VideoMergerViewModel: ObservableObject {
     @Published var alertMessage = ""
     @Published var showAlert = false
     @Published var progress: Double = 0.0
+    @Published var successMessage: String?
+    
+    func reset() {
+        successMessage = nil // Reset success message
+    }
     
     func mergeVideos(_ videos: [AVAsset]) async {
         guard videos.count >= 2 else { return }
         
         isExporting = true
         progress = 0.0
+        successMessage = nil
         
         do {
             let tempDirURL = FileManager.default.temporaryDirectory
@@ -87,6 +93,7 @@ class VideoMergerViewModel: ObservableObject {
                             if let returnCode = session.getReturnCode(),
                                returnCode.isValueSuccess() {
                                 self.exportedVideoURL = outputURL
+                                self.successMessage = "视频合并成功！"
                                 print("Successfully merged videos")
                             } else {
                                 print("FFmpeg Merge Error: \(session.getLogsAsString() ?? "Unknown error")")

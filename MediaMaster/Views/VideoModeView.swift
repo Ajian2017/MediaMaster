@@ -18,21 +18,28 @@ struct VideoModeView: View {
                 Text("已选择 \(selectedVideos.count) 个视频")
                     .padding()
                 
-                // 合并视频按钮
-                Button(action: {
-                    Task {
-                        await viewModel.mergeVideos(selectedVideos)
-                    }
-                }) {
-                    Label("合并视频", systemImage: "film.stack")
+                // Show success message if available
+                if let successMessage = viewModel.successMessage {
+                    Text(successMessage)
+                        .foregroundColor(.green)
                         .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.green)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                        .padding(.horizontal)
+                } else {
+                    // 合并视频按钮
+                    Button(action: {
+                        Task {
+                            await viewModel.mergeVideos(selectedVideos)
+                        }
+                    }) {
+                        Label("合并视频", systemImage: "film.stack")
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                            .padding(.horizontal)
+                    }
+                    .disabled(selectedVideos.count < 2)
                 }
-                .disabled(selectedVideos.count < 2)
                 
                 // Show progress indicator
                 if viewModel.isExporting {
@@ -42,6 +49,9 @@ struct VideoModeView: View {
                 }
             }
             Spacer()
+        }
+        .onChange(of: selectedVideos) { _ in
+            viewModel.reset() // Reset success message when videos change
         }
     }
 } 
