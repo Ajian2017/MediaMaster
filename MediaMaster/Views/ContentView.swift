@@ -3,6 +3,7 @@ import PhotosUI
 import AVFoundation
 import UniformTypeIdentifiers
 import MobileCoreServices
+import PDFKit
 
 struct MovieTransferable: Transferable {
     let asset: AVAsset
@@ -28,6 +29,7 @@ struct ContentView: View {
     @State private var audioURL: URL?
     @State private var currentAudio: URL? = nil
     @State private var isAudioMinimized = false
+    @State private var selectedPDF: URL?
     
     enum ActiveSheet: Identifiable {
         case videoPreview(URL)
@@ -71,7 +73,7 @@ struct ContentView: View {
             .sheet(item: $activeSheet) { sheetContent($0) }
         }
         .onChange(of: selectedItems, perform: handleSelectedItems)
-        .onDrop(of: [.audio, .mp3, .mpeg4Audio, .wav], isTargeted: nil, perform: handleDrop)
+        .onDrop(of: [.audio, .mp3, .mpeg4Audio, .wav, UTType.pdf], isTargeted: nil, perform: handleDrop)
         .onAppear { setupNotifications() }
         .onDisappear {
             NotificationCenter.default.removeObserver(self)
@@ -134,19 +136,19 @@ struct ContentView: View {
     }
     
     private func handleDrop(_ providers: [NSItemProvider]) -> Bool {
-        Task {
-            for provider in providers {
-                for typeIdentifier in provider.registeredTypeIdentifiers {
-                    if let url = try? await provider.loadItem(forTypeIdentifier: typeIdentifier) as? URL {
-                        audioURL = url
-                        activeSheet = .inputFileList
-                        return true
+        for provider in providers {
+            if provider.canLoadObject(ofClass: URL.self) {
+                provider.loadObject(ofClass: URL.self) { (url, error) in
+                    if let url = url {
+                        DispatchQueue.main.async {
+                            self.selectedPDF = url
+                        }
                     }
                 }
+                return true
             }
-            return false
         }
-        return true
+        return false
     }
     
     private func mergeVideos() {
@@ -246,5 +248,28 @@ struct MinimizedAudioPlayer: View {
         .onTapGesture(perform: onTap)
         .background(Color(UIColor.systemBackground))
         .edgesIgnoringSafeArea(.bottom)
+    }
+}
+
+struct PDFViewer: View {
+    let url: URL
+    
+    var body: some View {
+        PDFKitView(url: url)
+    }
+}
+
+struct PDFKitView: UIViewRepresentable {
+    let url: URL
+    
+    func makeUIView(context: Context) -> PDFView {
+        let pdfView = PDFView()
+        pdfView.document = PDFDocument(url: url)
+        pdfView.autoScales = true
+        return pdfView
+    }
+    
+    func updateUIView(_ uiView: PDFView, context: Context) {
+        uiView.document = PDFDocument(url: url)
     }
 } 

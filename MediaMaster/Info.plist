@@ -25,6 +25,7 @@
 				<string>com.microsoft.waveform-audio</string>
 				<string>public.aifc-audio</string>
 				<string>public.aiff-audio</string>
+				<string>com.adobe.pdf</string>
 			</array>
 			<key>LSSupportsOpeningDocumentsInPlace</key>
 			<true/>

@@ -101,7 +101,8 @@ class AudioFileManager {
     
     // 处理外部打开的音频文件
     func handleExternalAudioFile(_ url: URL) {
-        guard url.pathExtension.lowercased() == "mp3" else { return }
+        let suffixs = ["mp3", "pdf"]
+        guard suffixs.contains(url.pathExtension.lowercased()) else { return }
         
         // 确保 Input 目录存在
         createInputDirectoryIfNeeded()
