@@ -1,5 +1,21 @@
 import SwiftUI
 
+struct ImagePreviewView: View {
+    let imageURL: URL
+    
+    var body: some View {
+        GeometryReader { geometry in
+            ScrollView([.horizontal, .vertical]) {
+                Image(uiImage: UIImage(contentsOfFile: imageURL.path) ?? UIImage())
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: geometry.size.width)
+            }
+        }
+        .navigationTitle(imageURL.lastPathComponent)
+    }
+}
+
 struct InputFileListView: View {
     @Environment(\.dismiss) private var dismiss
     @Binding var audioURL: URL?
@@ -73,6 +89,39 @@ struct InputFileListView: View {
                                     }
                                 )
                             }
+                        } else if isImage {
+                            // Add navigation for image files
+                            NavigationLink(value: file) {
+                                FileRowView(
+                                    url: file,
+                                    isDirectory: isDirectory,
+                                    isVideo: isVideo,
+                                    isImage: isImage,
+                                    onDelete: {
+                                        itemToDelete = file
+                                        showingDeleteAlert = true
+                                    },
+                                    onMove: {
+                                        itemToMove = file
+                                        showingMoveSheet = true
+                                    },
+                                    onRename: {
+                                        itemToRename = file
+                                        newItemName = file.lastPathComponent
+                                        showingRenameAlert = true
+                                    },
+                                    onShare: {
+                                        selectedFileToShare = file
+                                        shareFile()
+                                    }
+                                )
+                            }
+                            .contextMenu {
+                                shareButton(for: file)
+                                deleteButton(for: file)
+                                renameButton(for: file)
+                                moveButton(for: file)
+                            }
                         } else {
                             Button(action: {
                                 if isDirectory {
@@ -121,6 +170,9 @@ struct InputFileListView: View {
             .navigationDestination(for: URL.self) { url in
                 if url.pathExtension.lowercased() == "pdf" {
                     PDFViewer(url: url)
+                } else if url.pathExtension.lowercased() == "jpg" || url.pathExtension.lowercased() == "png" {
+                    // Add navigation destination for image files
+                    ImagePreviewView(imageURL: url)
                 } else {
                     VideoPlayerView(
                         videoURL: url,
@@ -348,7 +400,6 @@ struct InputFileListView: View {
     }
 }
 
-// 添加文件夹选择器视图
 struct FolderPickerView: View {
     @Environment(\.dismiss) private var dismiss
     var currentDirectory: URL?
@@ -407,7 +458,6 @@ struct FolderPickerView: View {
     }
 }
 
-// 添加文件行视图组件
 struct FileRowView: View {
     let url: URL
     let isDirectory: Bool
@@ -427,8 +477,8 @@ struct FileRowView: View {
                     .frame(width: 50, height: 50)
                     .cornerRadius(5)
             } else {
-                Image(systemName: getFileIcon(isDirectory: isDirectory, isVideo: isVideo))
-                    .foregroundColor(isDirectory ? .blue : (isVideo ? .red : .blue))
+                Image(systemName: getFileIcon(isDirectory: isDirectory, isVideo: isVideo, isImage: isImage))
+                    .foregroundColor(isDirectory ? .blue : (isVideo ? .red : (isImage ? .green : .blue)))
             }
             VStack(alignment: .leading) {
                 Text(url.lastPathComponent)
@@ -443,10 +493,20 @@ struct FileRowView: View {
                 }
             }
             Spacer()
-            if !isDirectory && !isImage {
-                Image(systemName: isVideo ? "play.rectangle.fill" : "play.circle.fill")
-                    .foregroundColor(isVideo ? .red : .blue)
-                    .font(.title2)
+            if !isDirectory {
+                if isVideo {
+                    Image(systemName: "play.rectangle.fill")
+                        .foregroundColor(.red)
+                        .font(.title2)
+                } else if isImage {
+                    Image(systemName: "eye.fill")
+                        .foregroundColor(.green)
+                        .font(.title2)
+                } else {
+                    Image(systemName: "play.circle.fill")
+                        .foregroundColor(.blue)
+                        .font(.title2)
+                }
             }
         }
         .contextMenu {
@@ -468,17 +528,29 @@ struct FileRowView: View {
                 }
                 
                 Button(role: .destructive, action: onDelete) {
-                    Label(isVideo ? "删除视频" : "删除文件", systemImage: "trash")
+                    Label(getDeleteLabel(), systemImage: "trash")
                 }
             }
         }
     }
     
-    private func getFileIcon(isDirectory: Bool, isVideo: Bool) -> String {
+    private func getDeleteLabel() -> String {
+        if isVideo {
+            return "删除视频"
+        } else if isImage {
+            return "删除图片"
+        } else {
+            return "删除文件"
+        }
+    }
+    
+    private func getFileIcon(isDirectory: Bool, isVideo: Bool, isImage: Bool) -> String {
         if isDirectory {
             return "folder"
         } else if isVideo {
             return "video"
+        } else if isImage {
+            return "photo"
         } else {
             return "music.note"
         }
@@ -498,4 +570,4 @@ struct FileRowView: View {
         }
         return ""
     }
-} 
+}
