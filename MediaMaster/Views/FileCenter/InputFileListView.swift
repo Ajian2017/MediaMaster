@@ -1,4 +1,5 @@
 import SwiftUI
+import LocalAuthentication
 
 struct InputFileListView: View {
     @Environment(\.dismiss) private var dismiss
@@ -21,6 +22,23 @@ struct InputFileListView: View {
     @State private var newItemName = ""
     @State private var navigationPath = NavigationPath()
     @State private var selectedFileToShare: URL?
+    
+    private func authenticateUser(completion: @escaping (Bool) -> Void) {
+        let context = LAContext()
+        var error: NSError?
+
+        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+            let reason = "请使用 Face ID 或 Touch ID 解锁访问文件"
+
+            context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { success, authenticationError in
+                DispatchQueue.main.async {
+                    completion(success)
+                }
+            }
+        } else {
+            completion(false)
+        }
+    }
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
@@ -110,7 +128,15 @@ struct InputFileListView: View {
                             Button(action: {
                                 if isDirectory {
                                     currentDirectory = file
-                                    loadFiles()
+                                    authenticateUser { success in
+                                           if success {
+                                               loadFiles()
+                                               print("Access granted to profile files.")
+                                           } else {
+                                               // Handle authentication failure
+                                               print("Access denied. Authentication failed.")
+                                           }
+                                       }
                                 } else if isAudio {
                                     onSelect(file)
                                     audioURL = file
