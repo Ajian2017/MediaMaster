@@ -7,6 +7,7 @@ struct PhotoModeView: View {
     @State private var selectedImages: [UIImage] = []
     @State private var showingShareSheet = false
     @State private var pdfData: Data?
+    @State private var inputDirectory: URL?
     
     var body: some View {
         VStack {
@@ -43,6 +44,16 @@ struct PhotoModeView: View {
                         .cornerRadius(10)
                         .padding(.horizontal)
                 }
+                
+                Button(action: copyImagesToInputFolder) {
+                    Label("复制到文件中心", systemImage: "folder.fill")
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.green)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                        .padding(.horizontal)
+                }
             }
         }
         .onChange(of: selectedItems) { _, newItems in
@@ -71,6 +82,9 @@ struct PhotoModeView: View {
                 showingShareSheet = true
             }
         }
+        .onAppear {
+            inputDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(Constants.inputDirectoryName)
+        }
     }
     
     private func createAndSharePDF() {
@@ -88,6 +102,24 @@ struct PhotoModeView: View {
         } else {
             print("Failed to generate PDF data.")
             showingShareSheet = false  // Reset the flag if PDF data generation fails
+        }
+    }
+
+    private func copyImagesToInputFolder() {
+        guard let inputDirectory = inputDirectory else { return }
+        
+        for image in selectedImages {
+            if let data = image.pngData() {
+                let fileName = UUID().uuidString + ".png"
+                let fileURL = inputDirectory.appendingPathComponent(fileName)
+                
+                do {
+                    try data.write(to: fileURL)
+                    print("Image copied to: \(fileURL)")
+                } catch {
+                    print("Error copying image: \(error)")
+                }
+            }
         }
     }
 }
