@@ -8,6 +8,8 @@ struct AudioPlayerView: View {
     let audioURL: URL
     let onMinimize: () -> Void
     
+    @State private var currentTrackName: String = ""
+
     init(
         viewModel: AudioPlayerViewModel,
         isMinimized: Binding<Bool>,
@@ -44,9 +46,15 @@ struct AudioPlayerView: View {
                 .foregroundColor(.blue)
             
             // 文件名
-            Text(audioURL.lastPathComponent)
+            Text(currentTrackName)
                 .lineLimit(1)
                 .truncationMode(.middle)
+                .onAppear {
+                    currentTrackName = audioURL.lastPathComponent
+                }
+                .onChange(of: viewModel.audioURL ?? audioURL) {_, newURL in
+                    currentTrackName = newURL.lastPathComponent
+                }
             
             // 进度条
             Slider(

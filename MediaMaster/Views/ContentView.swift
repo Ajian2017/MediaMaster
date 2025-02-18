@@ -111,7 +111,7 @@ struct ContentView: View {
                 isMinimized: $isAudioMinimized,
                 audioURL: url,
                 onMinimize: {
-                    currentAudio = url
+                    currentAudio = audioViewModel.audioURL ?? url
                 }
             )
         }
