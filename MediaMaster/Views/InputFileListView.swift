@@ -45,6 +45,7 @@ struct InputFileListView: View {
                         let isDirectory = AudioFileManager.shared.isDirectory(url: file)
                         let isVideo = file.pathExtension.lowercased() == "mp4"
                         let isAudio = file.pathExtension.lowercased() == "mp3"
+                        let isImage = file.pathExtension.lowercased() == "jpg" || file.pathExtension.lowercased() == "png"
                         
                         if isVideo {
                             NavigationLink(value: file) {
@@ -52,6 +53,7 @@ struct InputFileListView: View {
                                     url: file,
                                     isDirectory: isDirectory,
                                     isVideo: isVideo,
+                                    isImage: isImage,
                                     onDelete: {
                                         itemToDelete = file
                                         showingDeleteAlert = true
@@ -85,6 +87,7 @@ struct InputFileListView: View {
                                     url: file,
                                     isDirectory: isDirectory,
                                     isVideo: isVideo,
+                                    isImage: isImage,
                                     onDelete: {
                                         itemToDelete = file
                                         showingDeleteAlert = true
@@ -409,6 +412,7 @@ struct FileRowView: View {
     let url: URL
     let isDirectory: Bool
     let isVideo: Bool
+    let isImage: Bool
     var onDelete: () -> Void
     var onMove: () -> Void
     var onRename: () -> Void
@@ -416,8 +420,16 @@ struct FileRowView: View {
     
     var body: some View {
         HStack {
-            Image(systemName: getFileIcon(isDirectory: isDirectory, isVideo: isVideo))
-                .foregroundColor(isDirectory ? .blue : (isVideo ? .red : .blue))
+            if isImage {
+                Image(uiImage: UIImage(contentsOfFile: url.path) ?? UIImage())
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 50, height: 50)
+                    .cornerRadius(5)
+            } else {
+                Image(systemName: getFileIcon(isDirectory: isDirectory, isVideo: isVideo))
+                    .foregroundColor(isDirectory ? .blue : (isVideo ? .red : .blue))
+            }
             VStack(alignment: .leading) {
                 Text(url.lastPathComponent)
                     .lineLimit(2)
@@ -431,7 +443,7 @@ struct FileRowView: View {
                 }
             }
             Spacer()
-            if !isDirectory {
+            if !isDirectory && !isImage {
                 Image(systemName: isVideo ? "play.rectangle.fill" : "play.circle.fill")
                     .foregroundColor(isVideo ? .red : .blue)
                     .font(.title2)
