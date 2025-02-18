@@ -10,6 +10,8 @@
 		AA4535B048A19608143DD2C8 /* Pods_MediaMaster.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B79D3D3C7D587EFA9798F2E4 /* Pods_MediaMaster.framework */; };
 		D124523B2D6193D000CCB7C6 /* InputFileListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D124523A2D6193D000CCB7C6 /* InputFileListView.swift */; };
 		D124523D2D619F0000CCB7C6 /* MainContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D124523C2D619F0000CCB7C6 /* MainContentView.swift */; };
+		D13A9D512D6492500036E950 /* ImagePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D13A9D502D6492500036E950 /* ImagePreviewView.swift */; };
+		D13A9D532D6492F20036E950 /* FileRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D13A9D522D6492F20036E950 /* FileRowView.swift */; };
 		D14401552D62EA130087379D /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = D14401542D62EA130087379D /* readme.md */; };
 		D14401592D630EC50087379D /* PDFFileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14401582D630EC50087379D /* PDFFileView.swift */; };
 		D15C22A82D636D78004F741D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D15C22A72D636D78004F741D /* Constants.swift */; };
@@ -34,6 +36,8 @@
 		B79D3D3C7D587EFA9798F2E4 /* Pods_MediaMaster.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MediaMaster.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D124523A2D6193D000CCB7C6 /* InputFileListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputFileListView.swift; sourceTree = "<group>"; };
 		D124523C2D619F0000CCB7C6 /* MainContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainContentView.swift; sourceTree = "<group>"; };
+		D13A9D502D6492500036E950 /* ImagePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreviewView.swift; sourceTree = "<group>"; };
+		D13A9D522D6492F20036E950 /* FileRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileRowView.swift; sourceTree = "<group>"; };
 		D14401542D62EA130087379D /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
 		D14401582D630EC50087379D /* PDFFileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFFileView.swift; sourceTree = "<group>"; };
 		D15C22A72D636D78004F741D /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -85,6 +89,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		D13A9D542D64935A0036E950 /* FileCenter */ = {
+			isa = PBXGroup;
+			children = (
+				D13A9D522D6492F20036E950 /* FileRowView.swift */,
+				D13A9D502D6492500036E950 /* ImagePreviewView.swift */,
+				D124523A2D6193D000CCB7C6 /* InputFileListView.swift */,
+				D14401582D630EC50087379D /* PDFFileView.swift */,
+			);
+			path = FileCenter;
+			sourceTree = "<group>";
+		};
 		D1AA33A62D5D9D68006219EC = {
 			isa = PBXGroup;
 			children = (
@@ -130,9 +145,8 @@
 		D1AA33C82D5E597B006219EC /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				D14401582D630EC50087379D /* PDFFileView.swift */,
+				D13A9D542D64935A0036E950 /* FileCenter */,
 				D124523C2D619F0000CCB7C6 /* MainContentView.swift */,
-				D124523A2D6193D000CCB7C6 /* InputFileListView.swift */,
 				D1AA33D92D5F6440006219EC /* AudioPlayerView.swift */,
 				D1AA33D32D5E5AC3006219EC /* ModePicker.swift */,
 				D1AA33D52D5E5AC3006219EC /* PhotoModeView.swift */,
@@ -283,8 +297,10 @@
 				D1AA33D62D5E5AC3006219EC /* ModePicker.swift in Sources */,
 				D1AA33B32D5D9D68006219EC /* MediaMasterApp.swift in Sources */,
 				D1AA33CC2D5E597B006219EC /* ContentView.swift in Sources */,
+				D13A9D512D6492500036E950 /* ImagePreviewView.swift in Sources */,
 				D1E3BBD42D61A942006D0B38 /* AudioFileManager.swift in Sources */,
 				D15C22A82D636D78004F741D /* Constants.swift in Sources */,
+				D13A9D532D6492F20036E950 /* FileRowView.swift in Sources */,
 				D1AA33DA2D5F6440006219EC /* AudioPlayerView.swift in Sources */,
 				D1AA33D22D5E59DE006219EC /* PhotoLibraryManager.swift in Sources */,
 				D1AA33CF2D5E597B006219EC /* VideoPlayerViewModel.swift in Sources */,
