@@ -8,6 +8,7 @@ struct PhotoModeView: View {
     @State private var showingShareSheet = false
     @State private var pdfData: Data?
     @State private var inputDirectory: URL?
+    @State private var imagesCopied = false
     
     var body: some View {
         VStack {
@@ -49,10 +50,14 @@ struct PhotoModeView: View {
                     Label("复制到文件中心", systemImage: "folder.fill")
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background(Color.green)
+                        .background(imagesCopied ? Color.gray : Color.green)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                         .padding(.horizontal)
+                }
+                .disabled(imagesCopied)
+                .alert(isPresented: $imagesCopied) {
+                    Alert(title: Text("复制完成"), message: Text("所有图片已成功复制到文件中心。"), dismissButton: .default(Text("确定")))
                 }
             }
         }
@@ -121,6 +126,7 @@ struct PhotoModeView: View {
                 }
             }
         }
+        imagesCopied = true
     }
 }
 
