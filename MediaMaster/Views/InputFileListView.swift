@@ -26,15 +26,7 @@ struct InputFileListView: View {
         NavigationStack(path: $navigationPath) {
             List {
                 if let current = currentDirectory, current.lastPathComponent != Constants.inputDirectoryName {
-                    Button(action: {
-                        currentDirectory = current.deletingLastPathComponent()
-                        loadFiles()
-                    }) {
-                        HStack {
-                            Image(systemName: "arrow.backward")
-                            Text("返回上级")
-                        }
-                    }
+                    backButton(current: current)
                 }
                 
                 ForEach(files, id: \.self) { file in
@@ -239,6 +231,27 @@ struct InputFileListView: View {
         }
     }
     
+    private func backButton(current: URL) -> some View {
+        Button(action: {
+            currentDirectory = current.deletingLastPathComponent()
+            loadFiles()
+        }) {
+            HStack {
+                Image(systemName: "arrow.backward")
+                Text("返回上级")
+            }
+        }
+    }
+    
+    private func fileRow(file: URL) -> some View {
+        Button(action: {
+            onSelect(file)
+            audioURL = file
+        }) {
+            Text(file.lastPathComponent)
+        }
+    }
+    
     private func loadFiles() {
         files = AudioFileManager.shared.getContents(at: currentDirectory)
     }
@@ -407,7 +420,10 @@ struct FileRowView: View {
                 .foregroundColor(isDirectory ? .blue : (isVideo ? .red : .blue))
             VStack(alignment: .leading) {
                 Text(url.lastPathComponent)
-                    .lineLimit(1)
+                    .lineLimit(2)
+                    .truncationMode(.tail)
+                    .font(.subheadline)
+                    .foregroundColor(.primary)
                 if !isDirectory {
                     Text(formatFileDate(for: url))
                         .font(.caption)
