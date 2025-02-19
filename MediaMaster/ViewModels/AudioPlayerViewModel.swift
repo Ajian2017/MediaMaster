@@ -15,6 +15,7 @@ class AudioPlayerViewModel: ObservableObject {
     private var timeObserver: Any?
     private var currentIndex: Int = 0
     private var isShuttingDown = false  // 添加标志以防止重复清理
+    private var timer: AnyCancellable? // 添加定时器
     
     func setupPlayer(with url: URL) async {
         // 如果已经在播放同一个文件，不需要重新设置
@@ -220,5 +221,21 @@ class AudioPlayerViewModel: ObservableObject {
         
         isShuttingDown = false
         isReady = false
+    }
+
+    func startTimer(for duration: Int) {
+        timer?.cancel() // 取消之前的定时器
+        guard duration > 0 else { return } // 如果定时器为0，则不启动
+
+        timer = Just(())
+            .delay(for: .seconds(Double(duration * 60)), scheduler: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.pause() // 定时器到期后暂停音乐
+            }
+    }
+
+    func stopTimer() {
+        timer?.cancel() // 停止定时器
+        timer = nil
     }
 } 

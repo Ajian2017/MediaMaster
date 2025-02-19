@@ -28,6 +28,7 @@
 		D1AA33D82D5E5AC3006219EC /* PhotoModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AA33D52D5E5AC3006219EC /* PhotoModeView.swift */; };
 		D1AA33DA2D5F6440006219EC /* AudioPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AA33D92D5F6440006219EC /* AudioPlayerView.swift */; };
 		D1AA33DC2D5F66DC006219EC /* AudioPlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AA33DB2D5F66DC006219EC /* AudioPlayerViewModel.swift */; };
+		D1AF83362D65B21B002E0686 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AF83352D65B21B002E0686 /* SettingsView.swift */; };
 		D1CA2CE52D64F0BC00246737 /* PDFViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA2CE42D64F0BC00246737 /* PDFViewer.swift */; };
 		D1E3BBD42D61A942006D0B38 /* AudioFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1E3BBD32D61A942006D0B38 /* AudioFileManager.swift */; };
 /* End PBXBuildFile section */
@@ -57,6 +58,7 @@
 		D1AA33D92D5F6440006219EC /* AudioPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayerView.swift; sourceTree = "<group>"; };
 		D1AA33DB2D5F66DC006219EC /* AudioPlayerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayerViewModel.swift; sourceTree = "<group>"; };
 		D1AA33DD2D5F7476006219EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D1AF83352D65B21B002E0686 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D1CA2CE42D64F0BC00246737 /* PDFViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFViewer.swift; sourceTree = "<group>"; };
 		D1E3BBD32D61A942006D0B38 /* AudioFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioFileManager.swift; sourceTree = "<group>"; };
 		F58F323B8E79F76C8264B921 /* Pods-MediaMaster.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MediaMaster.debug.xcconfig"; path = "Target Support Files/Pods-MediaMaster/Pods-MediaMaster.debug.xcconfig"; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 		D1AA33C82D5E597B006219EC /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D1AF83352D65B21B002E0686 /* SettingsView.swift */,
 				D13A9D542D64935A0036E950 /* FileCenter */,
 				D124523C2D619F0000CCB7C6 /* MainContentView.swift */,
 				D1AA33D92D5F6440006219EC /* AudioPlayerView.swift */,
@@ -299,6 +302,7 @@
 				D124523D2D619F0000CCB7C6 /* MainContentView.swift in Sources */,
 				D1CA2CE52D64F0BC00246737 /* PDFViewer.swift in Sources */,
 				D1AA33D62D5E5AC3006219EC /* ModePicker.swift in Sources */,
+				D1AF83362D65B21B002E0686 /* SettingsView.swift in Sources */,
 				D1AA33B32D5D9D68006219EC /* MediaMasterApp.swift in Sources */,
 				D1AA33CC2D5E597B006219EC /* ContentView.swift in Sources */,
 				D13A9D512D6492500036E950 /* ImagePreviewView.swift in Sources */,

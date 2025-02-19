@@ -68,6 +68,11 @@ struct ContentView: View {
             }.tabItem {
                 Label("File Center", systemImage: "folder")
             }
+            SettingsView()
+                .environmentObject(audioViewModel)
+                .tabItem {
+                    Label("Settings", systemImage: "gear")
+                }
         }
     }
         
