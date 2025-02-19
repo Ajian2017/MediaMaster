@@ -183,7 +183,7 @@ Library.
 			<key>License</key>
 			<string>LGPL-3.0</string>
 			<key>Title</key>
-			<string>ffmpeg-kit-ios-min</string>
+			<string>ffmpeg-kit-ios-full</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 		</dict>

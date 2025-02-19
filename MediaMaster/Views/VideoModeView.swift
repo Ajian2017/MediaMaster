@@ -39,6 +39,22 @@ struct VideoModeView: View {
                             .padding(.horizontal)
                     }
                     .disabled(selectedVideos.count < 2)
+                    
+                    // 提取音频按钮
+                    Button(action: {
+                        Task {
+                            await viewModel.extractAudio(from: selectedVideos)
+                        }
+                    }) {
+                        Label("提取音频", systemImage: "music.note")
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                            .padding(.horizontal)
+                    }
+                    .disabled(selectedVideos.isEmpty)
                 }
                 
                 // Show progress indicator

@@ -1,5 +1,5 @@
 CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO
-FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/ffmpeg-kit-ios-min" "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-min"
+FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/ffmpeg-kit-ios-full" "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-full"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
 LD_RUNPATH_SEARCH_PATHS = $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'
 OTHER_LDFLAGS = $(inherited) -l"bz2" -l"c++" -l"iconv" -l"z" -framework "AVFoundation" -framework "AudioToolbox" -framework "CoreMedia" -framework "VideoToolbox" -framework "ffmpegkit" -framework "libavcodec" -framework "libavdevice" -framework "libavfilter" -framework "libavformat" -framework "libavutil" -framework "libswresample" -framework "libswscale"

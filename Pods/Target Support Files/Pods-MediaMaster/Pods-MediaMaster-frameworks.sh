@@ -176,24 +176,24 @@ code_sign_if_enabled() {
 }
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-min/ffmpegkit.framework"
-  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-min/libavcodec.framework"
-  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-min/libavdevice.framework"
-  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-min/libavfilter.framework"
-  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-min/libavformat.framework"
-  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-min/libavutil.framework"
-  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-min/libswresample.framework"
-  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-min/libswscale.framework"
+  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-full/ffmpegkit.framework"
+  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-full/libavcodec.framework"
+  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-full/libavdevice.framework"
+  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-full/libavfilter.framework"
+  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-full/libavformat.framework"
+  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-full/libavutil.framework"
+  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-full/libswresample.framework"
+  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-full/libswscale.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-min/ffmpegkit.framework"
-  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-min/libavcodec.framework"
-  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-min/libavdevice.framework"
-  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-min/libavfilter.framework"
-  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-min/libavformat.framework"
-  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-min/libavutil.framework"
-  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-min/libswresample.framework"
-  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-min/libswscale.framework"
+  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-full/ffmpegkit.framework"
+  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-full/libavcodec.framework"
+  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-full/libavdevice.framework"
+  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-full/libavfilter.framework"
+  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-full/libavformat.framework"
+  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-full/libavutil.framework"
+  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-full/libswresample.framework"
+  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/ffmpeg-kit-ios-full/libswscale.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then
   wait

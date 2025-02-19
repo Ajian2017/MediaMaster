@@ -6,5 +6,5 @@ target 'MediaMaster' do
   use_frameworks!
   
   # 使用 min 版本的 FFmpeg
-  pod 'ffmpeg-kit-ios-min'
-end 
+  pod 'ffmpeg-kit-ios-full'
+end

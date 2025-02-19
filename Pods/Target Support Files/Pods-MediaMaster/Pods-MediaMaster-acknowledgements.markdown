@@ -1,7 +1,7 @@
 # Acknowledgements
 This application makes use of the following third party libraries:
 
-## ffmpeg-kit-ios-min
+## ffmpeg-kit-ios-full
 
                    GNU LESSER GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007

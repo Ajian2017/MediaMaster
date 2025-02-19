@@ -10,6 +10,11 @@ class VideoMergerViewModel: ObservableObject {
     @Published var progress: Double = 0.0
     @Published var successMessage: String?
     
+    private var inputDirectoryURL: URL {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+            .appendingPathComponent("Input")
+    }
+    
     func reset() {
         successMessage = nil // Reset success message
     }
@@ -130,5 +135,54 @@ class VideoMergerViewModel: ObservableObject {
                 self.progress = min(time / totalDuration * 100.0, 100.0)
             }
         }
+    }
+    
+    func extractAudio(from videos: [AVAsset]) async {
+        guard !videos.isEmpty else { return }
+        
+        isExporting = true
+        progress = 0.0
+        successMessage = nil
+        
+        do {
+            // Ensure the input directory exists
+            try FileManager.default.createDirectory(at: inputDirectoryURL, withIntermediateDirectories: true)
+            
+            for (index, asset) in videos.enumerated() {
+                if let urlAsset = asset as? AVURLAsset {
+                    // Change the output file extension to .mp3
+                    let audioOutputURL = inputDirectoryURL.appendingPathComponent("audio\(index).mp3")
+                    
+                    // FFmpeg command to extract audio in MP3 format
+                    let extractCommand = "-i \(urlAsset.url.path) -q:a 0 -map a -codec:a libmp3lame \(audioOutputURL.path)"
+                    
+                    let result = await withCheckedContinuation { continuation in
+                        FFmpegKit.executeAsync(extractCommand) { session in
+                            if let session = session,
+                               let returnCode = session.getReturnCode(),
+                               returnCode.isValueSuccess() {
+                                print("Successfully extracted audio from video \(index)")
+                            } else {
+                                print("Audio Extraction Error for video \(index): \(session?.getLogsAsString() ?? "Unknown error")")
+                            }
+                            continuation.resume(returning: session?.getReturnCode()?.isValueSuccess() ?? false)
+                        }
+                    }
+                    
+                    if !result {
+                        throw NSError(domain: "FFmpegError", code: -1, userInfo: [NSLocalizedDescriptionKey: "音频提取失败"])
+                    }
+                }
+            }
+            
+            successMessage = "音频提取成功！"
+            print("Audio extraction completed successfully.")
+        } catch {
+            print("Audio Extraction Error: \(error.localizedDescription)")
+            alertMessage = "音频提取失败：\(error.localizedDescription)"
+            showAlert = true
+        }
+        
+        isExporting = false
     }
 } 
