@@ -151,7 +151,14 @@ class VideoMergerViewModel: ObservableObject {
             for (index, asset) in videos.enumerated() {
                 if let urlAsset = asset as? AVURLAsset {
                     // Change the output file extension to .mp3
-                    let audioOutputURL = inputDirectoryURL.appendingPathComponent("audio\(index).mp3")
+                    let timestamp = DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium)
+                        .replacingOccurrences(of: " ", with: "_") // Replace spaces with underscores
+                        .replacingOccurrences(of: ":", with: "-") // Replace colons with dashes
+                        .replacingOccurrences(of: "/", with: "-") // Replace slashes with dashes
+                        .replacingOccurrences(of: ".", with: "-") // Replace periods with dashes
+                
+                    // Change the output file name to include the timestamp
+                    let audioOutputURL = inputDirectoryURL.appendingPathComponent("audio_\(timestamp).mp3")
                     
                     // FFmpeg command to extract audio in MP3 format
                     let extractCommand = "-i \(urlAsset.url.path) -q:a 0 -map a -codec:a libmp3lame \(audioOutputURL.path)"

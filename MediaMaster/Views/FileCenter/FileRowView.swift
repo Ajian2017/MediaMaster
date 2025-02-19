@@ -32,6 +32,9 @@ struct FileRowView: View {
                     Text(formatFileDate(for: url))
                         .font(.caption)
                         .foregroundColor(.gray)
+                    Text(fileSize(for: url))
+                        .font(.caption)
+                        .foregroundColor(.gray)
                 }
             }
             Spacer()
@@ -111,5 +114,17 @@ struct FileRowView: View {
             print("Error getting file date: \(error)")
         }
         return ""
+    }
+    
+    private func fileSize(for url: URL) -> String {
+        do {
+            let resources = try url.resourceValues(forKeys: [.fileSizeKey])
+            if let fileSize = resources.fileSize {
+                return ByteCountFormatter.string(fromByteCount: Int64(fileSize), countStyle: .file)
+            }
+        } catch {
+            print("Error getting file size: \(error)")
+        }
+        return "未知大小"
     }
 }
