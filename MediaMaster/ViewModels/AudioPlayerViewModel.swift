@@ -10,13 +10,16 @@ class AudioPlayerViewModel: ObservableObject {
     @Published var audioURL: URL?
     @Published var isReady = false
     @Published var playlist: [URL] = []  // 添加播放列表
+    @Published var remainingTime: Int = 0 // Add remaining time property
     
     var player: AVPlayer?
     private var timeObserver: Any?
     private var currentIndex: Int = 0
     private var isShuttingDown = false  // 添加标志以防止重复清理
     private var timer: AnyCancellable? // 添加定时器
-    
+    private var countdownTimer: AnyCancellable? // Timer for countdown
+    private var expirationTimer: AnyCancellable?
+
     func setupPlayer(with url: URL) async {
         // 如果已经在播放同一个文件，不需要重新设置
         if audioURL == url && isReady {
@@ -224,18 +227,29 @@ class AudioPlayerViewModel: ObservableObject {
     }
 
     func startTimer(for duration: Int) {
-        timer?.cancel() // 取消之前的定时器
-        guard duration > 0 else { return } // 如果定时器为0，则不启动
-
-        timer = Just(())
+        stopTimer() // Stop any existing timer
+        remainingTime = duration * 60 // Set remaining time
+        expirationTimer = Just(())
             .delay(for: .seconds(Double(duration * 60)), scheduler: RunLoop.main)
             .sink { [weak self] _ in
-                self?.pause() // 定时器到期后暂停音乐
+                self?.pause() // Pause music when timer expires
+                self?.remainingTime = 0 // Reset remaining time
+            }
+        
+        // Start a countdown every second
+        countdownTimer = Timer.publish(every: 1, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                guard let self = self, self.remainingTime > 0 else { return }
+                self.remainingTime -= 1
             }
     }
 
     func stopTimer() {
-        timer?.cancel() // 停止定时器
-        timer = nil
+        expirationTimer?.cancel()
+        countdownTimer?.cancel() // Stop countdown timer
+        countdownTimer = nil
+        remainingTime = 0 // Reset remaining time
     }
 } 
+

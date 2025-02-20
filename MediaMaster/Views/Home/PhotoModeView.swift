@@ -31,6 +31,7 @@ struct PhotoModeView: View {
                                 .scaledToFill()
                                 .frame(height: 120)
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
+                                .padding(EdgeInsets(top: 0,leading: 0,bottom: 0,trailing: 2))
                         }
                     }
                     .padding()

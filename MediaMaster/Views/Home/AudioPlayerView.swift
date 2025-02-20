@@ -67,9 +67,9 @@ struct AudioPlayerView: View {
             }
             
             HStack {
-                Text(timeString(from: viewModel.currentTime))
+                Text(TimeUtil.timeString(from: viewModel.currentTime))
                 Spacer()
-                Text(timeString(from: viewModel.duration))
+                Text(TimeUtil.timeString(from: viewModel.duration))
             }
             .font(.caption)
             
@@ -124,11 +124,5 @@ struct AudioPlayerView: View {
                 viewModel.cleanup()
             }
         }
-    }
-    
-    private func timeString(from seconds: Double) -> String {
-        let minutes = Int(seconds) / 60
-        let seconds = Int(seconds) % 60
-        return String(format: "%02d:%02d", minutes, seconds)
     }
 } 

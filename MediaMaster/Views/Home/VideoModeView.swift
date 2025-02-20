@@ -66,7 +66,7 @@ struct VideoModeView: View {
             }
             Spacer()
         }
-        .onChange(of: selectedVideos) { _ in
+        .onChange(of: selectedVideos) { _, _ in
             viewModel.reset() // Reset success message when videos change
         }
     }

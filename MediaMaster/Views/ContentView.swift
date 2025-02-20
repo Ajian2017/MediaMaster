@@ -80,12 +80,14 @@ struct ContentView: View {
             ZStack(alignment: .bottom) {
                 mainContent
                     .navigationTitle(isVideoMode ? "视频合并" : "合并照片为PDF")
-                    .padding(.bottom, isAudioMinimized ? 80 : 0)
+                    .padding(.top, isAudioMinimized ? 80 : 0)
                     .animation(.easeInOut, value: isAudioMinimized)
             }
             .sheet(item: $activeSheet) { sheetContent($0) }
         }
-        .onChange(of: selectedItems, perform: handleSelectedItems)
+        .onChange(of: selectedItems) { oldValue, selectedItems in
+            handleSelectedItems(selectedItems)
+        }
         .onDrop(of: [.audio, .mp3, .mpeg4Audio, .wav, UTType.pdf], isTargeted: nil, perform: handleDrop)
         .onAppear { setupNotifications() }
         .onDisappear {

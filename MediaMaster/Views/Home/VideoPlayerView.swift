@@ -136,7 +136,7 @@ struct VideoControlsView: View {
                         .foregroundColor(.white)
                 }
                 
-                Text(timeString(from: currentTime) + " / " + timeString(from: duration))
+                Text(TimeUtil.timeString(from: currentTime) + " / " + TimeUtil.timeString(from: duration))
                     .foregroundColor(.white)
                     .font(.caption)
                 
@@ -154,11 +154,5 @@ struct VideoControlsView: View {
         }
         .padding()
         .background(Color.black.opacity(0.6))
-    }
-    
-    private func timeString(from seconds: Double) -> String {
-        let minutes = Int(seconds) / 60
-        let seconds = Int(seconds) % 60
-        return String(format: "%02d:%02d", minutes, seconds)
     }
 } 

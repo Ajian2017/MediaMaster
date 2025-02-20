@@ -274,7 +274,7 @@ struct InputFileListView: View {
                     selectedFolder: $selectedDestination,
                     excludeURL: itemToMove
                 )
-                .onChange(of: selectedDestination) { newValue in
+                .onChange(of: selectedDestination) { _, newValue in
                     if let destination = newValue,
                        let source = itemToMove {
                         do {

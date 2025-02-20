@@ -33,8 +33,7 @@ class AudioFileManager {
                 if isDirectory1 != isDirectory2 {
                     return isDirectory1
                 }
-                // 按名称排序
-                return url1.lastPathComponent < url2.lastPathComponent
+                return true
             }
         } catch {
             print("Error getting directory contents: \(error)")
