@@ -60,11 +60,11 @@ class AudioPlayerViewModel: ObservableObject {
             )
             playlist = files
                 .filter { $0.pathExtension.lowercased() == "mp3" }
-                .sorted { file1, file2 in
-                    let date1 = try? file1.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate
-                    let date2 = try? file2.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate
-                    return date1 ?? Date() > date2 ?? Date()
-                }
+//                .sorted { file1, file2 in
+//                    let date1 = try? file1.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate
+//                    let date2 = try? file2.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate
+//                    return date1 ?? Date() > date2 ?? Date()
+//                }
             print("Loaded playlist: \(playlist.count) files")
         } catch {
             print("Error loading playlist: \(error)")

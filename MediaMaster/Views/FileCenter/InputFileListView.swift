@@ -3,9 +3,8 @@ import LocalAuthentication
 
 struct InputFileListView: View {
     @Environment(\.dismiss) private var dismiss
-    @Binding var audioURL: URL?
     let onSelect: (URL) -> Void
-    
+
     @State private var currentDirectory: URL?
     @State private var files: [URL] = []
     @State private var showingNewFolderAlert = false
@@ -21,7 +20,6 @@ struct InputFileListView: View {
     @State private var itemToRename: URL?
     @State private var newItemName = ""
     @State private var navigationPath = NavigationPath()
-    @State private var selectedFileToShare: URL?
     
     private func authenticateUser(completion: @escaping (Bool) -> Void) {
         let context = LAContext()
@@ -86,8 +84,7 @@ struct InputFileListView: View {
                                         showingRenameAlert = true
                                     },
                                     onShare: {
-                                        selectedFileToShare = file
-                                        shareFile()
+                                        FileUtil.shareFile(file)
                                     }
                                 )
                             }
@@ -113,8 +110,7 @@ struct InputFileListView: View {
                                         showingRenameAlert = true
                                     },
                                     onShare: {
-                                        selectedFileToShare = file
-                                        shareFile()
+                                        FileUtil.shareFile(file)
                                     }
                                 )
                             }
@@ -139,7 +135,6 @@ struct InputFileListView: View {
                                        }
                                 } else if isAudio {
                                     onSelect(file)
-                                    audioURL = file
                                 }
                             }) {
                                 FileRowView(
@@ -161,8 +156,7 @@ struct InputFileListView: View {
                                         showingRenameAlert = true
                                     },
                                     onShare: {
-                                        selectedFileToShare = file
-                                        shareFile()
+                                        FileUtil.shareFile(file)
                                     }
                                 )
                             }
@@ -307,49 +301,14 @@ struct InputFileListView: View {
             }
         }
     }
-    
-    private func fileRow(file: URL) -> some View {
-        Button(action: {
-            onSelect(file)
-            audioURL = file
-        }) {
-            Text(file.lastPathComponent)
-        }
-    }
-    
+        
     private func loadFiles() {
         files = AudioFileManager.shared.getContents(at: currentDirectory)
     }
-    
-    private func formatFileDate(for file: URL) -> String {
-        do {
-            let resources = try file.resourceValues(forKeys: [.contentModificationDateKey])
-            if let date = resources.contentModificationDate {
-                let formatter = DateFormatter()
-                formatter.dateStyle = .medium
-                formatter.timeStyle = .short
-                return formatter.string(from: date)
-            }
-        } catch {
-            print("Error getting file date: \(error)")
-        }
-        return ""
-    }
-    
-    private func getFileIcon(isDirectory: Bool, isVideo: Bool) -> String {
-        if isDirectory {
-            return "folder"
-        } else if isVideo {
-            return "video"
-        } else {
-            return "music.note"
-        }
-    }
-    
+        
     private func shareButton(for file: URL) -> some View {
         Button(action: {
-            selectedFileToShare = file
-            shareFile()
+            FileUtil.shareFile(file)
         }) {
             Label("分享", systemImage: "square.and.arrow.up")
         }
@@ -381,89 +340,5 @@ struct InputFileListView: View {
         }) {
             Label("移动到...", systemImage: "folder")
         }
-    }
-    
-    private func shareFile() {
-        guard let fileToShare = selectedFileToShare else { return }
-        let activityViewController = UIActivityViewController(activityItems: [fileToShare], applicationActivities: nil)
-        
-        // Function to find the top-most view controller
-        func topViewController(from viewController: UIViewController?) -> UIViewController {
-            if let navigationController = viewController as? UINavigationController {
-                return topViewController(from: navigationController.visibleViewController)
-            }
-            if let tabBarController = viewController as? UITabBarController {
-                return topViewController(from: tabBarController.selectedViewController)
-            }
-            if let presented = viewController?.presentedViewController {
-                return topViewController(from: presented)
-            }
-            return viewController!
-        }
-
-        // Get the top-most view controller to present the UIActivityViewController
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let rootViewController = windowScene.windows.first?.rootViewController {
-            let topVC = topViewController(from: rootViewController)
-            topVC.present(activityViewController, animated: true, completion: nil)
-        }
-    }
-}
-
-struct FolderPickerView: View {
-    @Environment(\.dismiss) private var dismiss
-    var currentDirectory: URL?
-    @Binding var selectedFolder: URL?
-    var excludeURL: URL?
-    
-    @State private var files: [URL] = []
-    
-    var body: some View {
-        NavigationView {
-            List {
-                if let current = currentDirectory {
-                    Button(action: {
-                        selectedFolder = current.deletingLastPathComponent()
-                    }) {
-                        HStack {
-                            Image(systemName: "arrow.backward")
-                            Text("选择当前文件夹")
-                        }
-                    }
-                }
-                
-                ForEach(files, id: \.self) { url in
-                    if url != excludeURL && AudioFileManager.shared.isDirectory(url: url) {
-                        Button(action: {
-                            selectedFolder = url
-                        }) {
-                            HStack {
-                                Image(systemName: "folder")
-                                    .foregroundColor(.blue)
-                                Text(url.lastPathComponent)
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .foregroundColor(.gray)
-                            }
-                        }
-                    }
-                }
-            }
-            .navigationTitle("选择目标文件夹")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("取消") {
-                        dismiss()
-                    }
-                }
-            }
-        }
-        .onAppear {
-            loadFolders()
-        }
-    }
-    
-    private func loadFolders() {
-        files = AudioFileManager.shared.getContents(at: currentDirectory)
-    }
+    }    
 }

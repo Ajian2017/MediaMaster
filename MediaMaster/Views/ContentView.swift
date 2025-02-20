@@ -25,8 +25,6 @@ struct ContentView: View {
     @State private var selectedVideos: [AVAsset] = []
     @State private var isVideoMode = false
     @State private var activeSheet: ActiveSheet? = nil
-    @State private var audioURL: URL?
-    @State private var currentAudio: URL? = nil
     @State private var isAudioMinimized = false
     @State private var selectedPDF: URL?
     
@@ -43,14 +41,13 @@ struct ContentView: View {
     }
     
     var body: some View {
-        if isAudioMinimized, let url = currentAudio, let player = audioViewModel.player {
+        if isAudioMinimized, let url = audioViewModel.audioURL, let _ = audioViewModel.player {
             MinimizedAudioPlayer(
                 isMinimized: $isAudioMinimized,
                 viewModel: audioViewModel,
-                onTap: { activeSheet = .audioPlayer(audioViewModel.audioURL ?? url) },
+                onTap: { activeSheet = .audioPlayer(url) },
                 onClose: {
                     audioViewModel.cleanup()
-                    currentAudio = nil
                     isAudioMinimized = false
                 }
             )
@@ -61,8 +58,7 @@ struct ContentView: View {
             homeView.tabItem {
                 Label("Home", systemImage: "house")
             }
-            InputFileListView(audioURL: $audioURL) { url in
-                currentAudio = url
+            InputFileListView() { url in
                 activeSheet = .audioPlayer(url)
             }.tabItem {
                 Label("File Center", systemImage: "folder")
@@ -80,7 +76,7 @@ struct ContentView: View {
             ZStack(alignment: .bottom) {
                 mainContent
                     .navigationTitle(isVideoMode ? "视频合并" : "合并照片为PDF")
-                    .padding(.top, isAudioMinimized ? 80 : 0)
+//                    .padding(.top, isAudioMinimized ? 80 : 0)
                     .animation(.easeInOut, value: isAudioMinimized)
             }
             .sheet(item: $activeSheet) { sheetContent($0) }
@@ -115,9 +111,7 @@ struct ContentView: View {
                 viewModel: audioViewModel,
                 isMinimized: $isAudioMinimized,
                 audioURL: url,
-                onMinimize: {
-                    currentAudio = audioViewModel.audioURL ?? url
-                }
+                onMinimize: {}
             )
         }
     }
@@ -179,7 +173,6 @@ struct ContentView: View {
             queue: .main
         ) { notification in
             if let url = notification.object as? URL {
-                audioURL = url
                 activeSheet = .audioPlayer(url)
             }
         }
