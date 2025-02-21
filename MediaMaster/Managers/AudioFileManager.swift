@@ -212,16 +212,5 @@ class AudioFileManager {
             print("Error renaming item: \(error)")
             throw error
         }
-    }
-    
-    // Add a method to get PDF files
-    func getPDFsInInputDirectory() -> [URL] {
-        do {
-            let files = try fileManager.contentsOfDirectory(at: inputDirectoryURL, includingPropertiesForKeys: nil)
-            return files.filter { $0.pathExtension.lowercased() == "pdf" }
-        } catch {
-            print("Error fetching PDF files: \(error)")
-            return []
-        }
-    }
-} 
+    }    
+}

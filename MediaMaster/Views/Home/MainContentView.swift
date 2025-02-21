@@ -46,7 +46,7 @@ struct MainContentView: View {
                     .padding(.horizontal)
             }
         }
-        .onChange(of: videoMergerViewModel.exportedVideoURL) { url in
+        .onChange(of: videoMergerViewModel.exportedVideoURL) {_, url in
             if let url = url {
                 activeSheet = .videoPreview(url) // Open the merged video
             }
