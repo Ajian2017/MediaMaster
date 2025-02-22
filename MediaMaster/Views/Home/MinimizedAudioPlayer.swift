@@ -21,7 +21,7 @@ struct MinimizedAudioPlayer: View {
                     .lineLimit(1)
                     .font(.subheadline)
                 
-                ProgressView(value: viewModel.currentTime, total: viewModel.duration)
+                ProgressView(value: viewModel.currentTime, total: max(viewModel.duration, 1))
                     .progressViewStyle(.linear)
                     .frame(height: 2)
             }

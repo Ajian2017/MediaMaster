@@ -22,10 +22,10 @@ struct InputFileListView: View {
                                 navigationPath.append(file)
                             }
                             .contextMenu {
-                                viewModel.share(for: file)
-                                viewModel.delete(for: file)
-                                viewModel.rename(for: file)
-                                viewModel.move(for: file)
+                                viewModel.shareItem(for: file)
+                                viewModel.deleteItem(for: file)
+                                viewModel.renameItem(for: file)
+                                viewModel.moveItem(for: file)
                             }
                     } else {
                         let isDirectory = AudioFileManager.shared.isDirectory(url: file)

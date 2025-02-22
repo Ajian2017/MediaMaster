@@ -108,7 +108,7 @@ class InputFileListViewModel: ObservableObject {
         }
     }
     
-    func delete(for file: URL) -> some View {
+    func deleteItem(for file: URL) -> some View {
         Button(role: .destructive, action: {
             self.itemToDelete = file
             self.showingDeleteAlert = true
@@ -117,7 +117,7 @@ class InputFileListViewModel: ObservableObject {
         }
     }
     
-    func rename(for file: URL) -> some View {
+    func renameItem(for file: URL) -> some View {
         Button(action: {
             self.itemToRename = file
             self.newItemName = file.lastPathComponent
@@ -127,7 +127,7 @@ class InputFileListViewModel: ObservableObject {
         }
     }
     
-    func move(for file: URL) -> some View {
+    func moveItem(for file: URL) -> some View {
         Button(action: {
             self.itemToMove = file
             self.showingMoveSheet = true
@@ -136,7 +136,7 @@ class InputFileListViewModel: ObservableObject {
         }
     }
     
-    func share(for file: URL) -> some View {
+    func shareItem(for file: URL) -> some View {
         Button(action: {
             FileUtil.shareFile(file)
         }) {

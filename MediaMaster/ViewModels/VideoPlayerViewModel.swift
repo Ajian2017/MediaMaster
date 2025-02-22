@@ -19,7 +19,15 @@ class VideoPlayerViewModel: ObservableObject {
         player = AVPlayer(url: url)
         
         if let playerItem = player?.currentItem {
-            duration = CMTimeGetSeconds(playerItem.asset.duration)
+            Task {
+                do {
+                    // Asynchronously load the duration of the asset
+                    let assetDuration = try await playerItem.asset.load(.duration)
+                    duration = CMTimeGetSeconds(assetDuration)
+                } catch {
+                    print("Failed to load asset duration: \(error)")
+                }
+            }
         }
         
         let interval = CMTime(seconds: 0.1, preferredTimescale: CMTimeScale(NSEC_PER_SEC))

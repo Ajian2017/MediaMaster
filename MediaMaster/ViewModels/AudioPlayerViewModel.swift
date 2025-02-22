@@ -18,7 +18,6 @@ class AudioPlayerViewModel: ObservableObject {
     private var isShuttingDown = false  // 添加标志以防止重复清理
     private var timer: AnyCancellable? // 添加定时器
     private var countdownTimer: AnyCancellable? // Timer for countdown
-    private var expirationTimer: AnyCancellable?
 
     func setupPlayer(with url: URL) async {
         // 如果已经在播放同一个文件，不需要重新设置
@@ -48,27 +47,12 @@ class AudioPlayerViewModel: ObservableObject {
     }
     
     private func loadPlaylist(_ url: URL? = nil) {
-        let fileManager = FileManager.default
-        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let inputDirectoryURL = url?.deletingLastPathComponent() ?? documentsURL.appendingPathComponent(Constants.inputDirectoryName)
+        let inputDirectoryURL = url?.deletingLastPathComponent() ?? AudioFileManager.shared.inputDirectoryURL
         
-        do {
-            let files = try fileManager.contentsOfDirectory(
-                at: inputDirectoryURL,
-                includingPropertiesForKeys: [.contentModificationDateKey],
-                options: [.skipsHiddenFiles]
-            )
-            playlist = files
-                .filter { $0.pathExtension.lowercased() == "mp3" }
-//                .sorted { file1, file2 in
-//                    let date1 = try? file1.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate
-//                    let date2 = try? file2.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate
-//                    return date1 ?? Date() > date2 ?? Date()
-//                }
-            print("Loaded playlist: \(playlist.count) files")
-        } catch {
-            print("Error loading playlist: \(error)")
-        }
+        let files = AudioFileManager.shared.getContents(at: inputDirectoryURL)
+        playlist = files
+            .filter { $0.pathExtension.lowercased() == "mp3" }
+        print("Loaded playlist: \(playlist.count) files")
     }
     
     private func setupCurrentTrack() async throws {
@@ -111,8 +95,10 @@ class AudioPlayerViewModel: ObservableObject {
                 queue: .main
             ) { [weak self] time in
                 guard let self = self else { return }
-                self.currentTime = time.seconds
-                self.updateNowPlayingInfo()
+                Task { @MainActor in
+                    self.currentTime = time.seconds
+                    self.updateNowPlayingInfo()
+                }
             }
             
             // 添加播放完成通知
@@ -229,12 +215,6 @@ class AudioPlayerViewModel: ObservableObject {
     func startTimer(for duration: Int) {
         stopTimer() // Stop any existing timer
         remainingTime = duration * 60 // Set remaining time
-        expirationTimer = Just(())
-            .delay(for: .seconds(Double(duration * 60)), scheduler: RunLoop.main)
-            .sink { [weak self] _ in
-                self?.pause() // Pause music when timer expires
-                self?.remainingTime = 0 // Reset remaining time
-            }
         
         // Start a countdown every second
         countdownTimer = Timer.publish(every: 1, on: .main, in: .common)
@@ -242,11 +222,14 @@ class AudioPlayerViewModel: ObservableObject {
             .sink { [weak self] _ in
                 guard let self = self, self.remainingTime > 0 else { return }
                 self.remainingTime -= 1
+                if (self.remainingTime <= 0) {
+                    self.pause() // Pause music when timer expires
+                    self.remainingTime = 0 // Reset remaining time
+                }
             }
     }
 
     func stopTimer() {
-        expirationTimer?.cancel()
         countdownTimer?.cancel() // Stop countdown timer
         countdownTimer = nil
         remainingTime = 0 // Reset remaining time
