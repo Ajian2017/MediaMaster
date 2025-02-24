@@ -64,15 +64,12 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         let fileManager = FileManager.default
         let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
         let inputDirectoryURL = documentsURL.appendingPathComponent(Constants.inputDirectoryName)
-//        let outputDirectoryURL = documentsURL.appendingPathComponent("Output")
         
         // 创建必要的目录
         try? fileManager.createDirectory(at: inputDirectoryURL, withIntermediateDirectories: true)
-//        try? fileManager.createDirectory(at: outputDirectoryURL, withIntermediateDirectories: true)
         
         print("Documents directory: \(documentsURL.path)")
         print("Input directory: \(inputDirectoryURL.path)")
-//        print("Output directory: \(outputDirectoryURL.path)")
     }
 }
 

@@ -1,5 +1,4 @@
 import SwiftUI
-import LocalAuthentication
 
 struct InputFileListView: View {
     @Environment(\.dismiss) private var dismiss
@@ -154,7 +153,7 @@ struct InputFileListView: View {
             }
             .sheet(isPresented: $viewModel.showingMoveSheet) {
                 FolderPickerView(
-                    currentDirectory: nil,
+                    currentDirectory: AudioFileManager.shared.inputDirectoryURL,
                     selectedFolder: $viewModel.selectedDestination,
                     excludeURL: viewModel.itemToMove
                 )
