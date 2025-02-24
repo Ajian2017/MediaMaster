@@ -153,7 +153,7 @@ struct InputFileListView: View {
             }
             .sheet(isPresented: $viewModel.showingMoveSheet) {
                 FolderPickerView(
-                    currentDirectory: AudioFileManager.shared.inputDirectoryURL,
+                    currentDirectory: $viewModel.currentDirectory,
                     selectedFolder: $viewModel.selectedDestination,
                     excludeURL: viewModel.itemToMove
                 )

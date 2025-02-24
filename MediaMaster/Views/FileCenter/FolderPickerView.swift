@@ -17,7 +17,7 @@ struct FolderNode: Identifiable, Hashable {
 
 struct FolderPickerView: View {
     @Environment(\.dismiss) private var dismiss
-    var currentDirectory: URL?
+    @Binding var currentDirectory: URL?
     @Binding var selectedFolder: URL?
     var excludeURL: URL?
 
@@ -82,7 +82,7 @@ struct FolderPickerView: View {
     }
 
     private func loadFolderStructure() {
-        guard let startURL = currentDirectory else { return }
+        let startURL = AudioFileManager.shared.inputDirectoryURL
         rootNode = createFolderNode(from: startURL)
         expandedNodes.insert(startURL)
     }
