@@ -27,12 +27,10 @@ class FileServerManager: ObservableObject {
                 let attributes = try FileManager.default.attributesOfItem(atPath: fileURL.path)
                 if let fileType = attributes[.type] as? FileAttributeType {
                     if fileType == .typeDirectory {
-                        // 如果是文件夹，返回子目录的文件列表
                         self.generateFileList(for: fileURL) { html in
                             completion(GCDWebServerDataResponse(html: html))
                         }
                     } else if fileType == .typeRegular {
-                        // 如果是文件，返回文件内容
                         completion(GCDWebServerFileResponse(file: fileURL.path) ?? GCDWebServerDataResponse(html: "<h1>File inaccessible</h1>"))
                     } else {
                         completion(GCDWebServerDataResponse(html: "<h1>Unsupported file type</h1>"))
@@ -42,6 +40,44 @@ class FileServerManager: ObservableObject {
                 completion(GCDWebServerDataResponse(html: "<h1>File or directory not found</h1>"))
             }
         }
+        
+        // 添加文件上传处理
+        webServer?.addHandler(forMethod: "POST", path: "/upload", request: GCDWebServerMultiPartFormRequest.self, processBlock: { (request) -> GCDWebServerResponse? in
+            guard let multipartRequest = request as? GCDWebServerMultiPartFormRequest else {
+                return GCDWebServerDataResponse(html: "<h1>Invalid request</h1>")
+            }
+            
+            // Invoke firstFile as a closure with the form field name "file"
+            guard let file = multipartRequest.firstFile(forControlName: "file") else {
+                return GCDWebServerDataResponse(html: "<h1>No file uploaded</h1>")
+            }
+            
+            let fileName = file.fileName ?? "uploaded_file"
+            let destinationURL = self.inputDirectory.appendingPathComponent(fileName)
+            
+            do {
+                var finalURL = destinationURL
+                if FileManager.default.fileExists(atPath: finalURL.path) {
+                    let timestamp = Int(Date().timeIntervalSince1970)
+                    let newFileName = "\(timestamp)_\(fileName)"
+                    finalURL = self.inputDirectory.appendingPathComponent(newFileName)
+                }
+                
+                try FileManager.default.moveItem(at: URL(fileURLWithPath: file.temporaryPath), to: finalURL)
+                
+                let html = """
+                <html>
+                    <body>
+                        <h1>File uploaded successfully!</h1>
+                        <a href="/">Back to file list</a>
+                    </body>
+                </html>
+                """
+                return GCDWebServerDataResponse(html: html)
+            } catch {
+                return GCDWebServerDataResponse(html: "<h1>Upload failed: \(error.localizedDescription)</h1>")
+            }
+        })
         
         // 启动服务器
         do {
@@ -62,11 +98,21 @@ class FileServerManager: ObservableObject {
         serverURL = "服务器已停止"
     }
     
-    // 生成文件列表的辅助方法
+    // 生成文件列表的辅助方法（添加上传表单）
     private func generateFileList(for directory: URL, completion: @escaping (String) -> Void) {
         do {
             let files = try FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: [.isDirectoryKey])
-            var html = "<html><body><h1>Files in \(directory.lastPathComponent)</h1><ul>"
+            var html = """
+            <html>
+                <body>
+                    <h1>Files in \(directory.lastPathComponent)</h1>
+                    <!-- 文件上传表单 -->
+                    <form action="/upload" method="post" enctype="multipart/form-data">
+                        <input type="file" name="file">
+                        <input type="submit" value="Upload File">
+                    </form>
+                    <ul>
+            """
             
             for file in files {
                 let fileName = file.lastPathComponent
@@ -75,7 +121,11 @@ class FileServerManager: ObservableObject {
                 let linkPath = "/files" + (path.hasPrefix("/") ? path : "/" + path)
                 html += "<li><a href=\"\(linkPath)\">\(fileName)\(isDirectory ? "/" : "")</a></li>"
             }
-            html += "</ul></body></html>"
+            html += """
+                    </ul>
+                </body>
+            </html>
+            """
             completion(html)
         } catch {
             completion("<html><body><h1>Error accessing directory</h1></body></html>")
