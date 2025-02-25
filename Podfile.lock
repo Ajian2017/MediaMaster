@@ -1,16 +1,22 @@
 PODS:
   - ffmpeg-kit-ios-full (6.0)
+  - GCDWebServer (3.5.4):
+    - GCDWebServer/Core (= 3.5.4)
+  - GCDWebServer/Core (3.5.4)
 
 DEPENDENCIES:
   - ffmpeg-kit-ios-full
+  - GCDWebServer (~> 3.5)
 
 SPEC REPOS:
   trunk:
     - ffmpeg-kit-ios-full
+    - GCDWebServer
 
 SPEC CHECKSUMS:
   ffmpeg-kit-ios-full: 0099a769d22114dde52cdc238397941c32f75d27
+  GCDWebServer: 2c156a56c8226e2d5c0c3f208a3621ccffbe3ce4
 
-PODFILE CHECKSUM: fe23f13aa8031e0e48aa3e68b19b2fa382fbf373
+PODFILE CHECKSUM: d9e8d41cec6aec7c039ac178256c336dc82441e4
 
 COCOAPODS: 1.15.2

@@ -41,13 +41,29 @@
 			</array>
 		</dict>
 	</array>
-	<key>UIFileSharingEnabled</key>
-	<true/>
+	<key>NSUbiquitousContainers</key>
+	<dict>
+		<key>iCloud.com.amob.MediaMaster.MediaMaster</key>
+		<dict>
+			<key>NSUbiquitousContainerIsDocumentScope</key>
+			<true/>
+			<key>NSUbiquitousContainerName</key>
+			<string>MediaMaster</string>
+			<key>NSUbiquitousContainerSupportedFolderLevels</key>
+			<string>Any</string>
+		</dict>
+	</dict>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
 	</array>
-	<key>NSFaceIDUsageDescription</key>
-	<string>This app uses Face ID for secure authentication to protect your account and data</string>
+	<key>UIFileSharingEnabled</key>
+	<true/>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>需要本地网络权限以运行服务器</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_http._tcp</string>
+	</array>
 </dict>
 </plist>

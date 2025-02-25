@@ -13,6 +13,8 @@
 		D10BB4012D66C45B00714E72 /* FolderPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D10BB4002D66C45B00714E72 /* FolderPickerView.swift */; };
 		D10BB4032D66CD3F00714E72 /* FileUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = D10BB4022D66CD3F00714E72 /* FileUtil.swift */; };
 		D10BB4092D67722F00714E72 /* InputFileListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D10BB4082D67722F00714E72 /* InputFileListViewModel.swift */; };
+		D11E32E02D6D6E8A0040DF4F /* FileServerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11E32DF2D6D6E8A0040DF4F /* FileServerView.swift */; };
+		D11E32E22D6D6F2B0040DF4F /* FileServerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11E32E12D6D6F2B0040DF4F /* FileServerManager.swift */; };
 		D124523B2D6193D000CCB7C6 /* InputFileListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D124523A2D6193D000CCB7C6 /* InputFileListView.swift */; };
 		D124523D2D619F0000CCB7C6 /* MainContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D124523C2D619F0000CCB7C6 /* MainContentView.swift */; };
 		D13A9D512D6492500036E950 /* ImagePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D13A9D502D6492500036E950 /* ImagePreviewView.swift */; };
@@ -46,6 +48,8 @@
 		D10BB4002D66C45B00714E72 /* FolderPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderPickerView.swift; sourceTree = "<group>"; };
 		D10BB4022D66CD3F00714E72 /* FileUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUtil.swift; sourceTree = "<group>"; };
 		D10BB4082D67722F00714E72 /* InputFileListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputFileListViewModel.swift; sourceTree = "<group>"; };
+		D11E32DF2D6D6E8A0040DF4F /* FileServerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileServerView.swift; sourceTree = "<group>"; };
+		D11E32E12D6D6F2B0040DF4F /* FileServerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileServerManager.swift; sourceTree = "<group>"; };
 		D124523A2D6193D000CCB7C6 /* InputFileListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputFileListView.swift; sourceTree = "<group>"; };
 		D124523C2D619F0000CCB7C6 /* MainContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainContentView.swift; sourceTree = "<group>"; };
 		D13A9D502D6492500036E950 /* ImagePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreviewView.swift; sourceTree = "<group>"; };
@@ -53,6 +57,7 @@
 		D14401542D62EA130087379D /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
 		D14401582D630EC50087379D /* PDFFileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFFileView.swift; sourceTree = "<group>"; };
 		D15C22A72D636D78004F741D /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		D164FBE82D6D6387005CDF45 /* MediaMaster.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MediaMaster.entitlements; sourceTree = "<group>"; };
 		D1AA33AF2D5D9D68006219EC /* MediaMaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MediaMaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1AA33B22D5D9D68006219EC /* MediaMasterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaMasterApp.swift; sourceTree = "<group>"; };
 		D1AA33B62D5D9D69006219EC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -160,6 +165,7 @@
 		D1AA33B12D5D9D68006219EC /* MediaMaster */ = {
 			isa = PBXGroup;
 			children = (
+				D164FBE82D6D6387005CDF45 /* MediaMaster.entitlements */,
 				D10BB3FE2D65FE4A00714E72 /* Utils */,
 				D15C22A72D636D78004F741D /* Constants.swift */,
 				D1AA33DD2D5F7476006219EC /* Info.plist */,
@@ -189,6 +195,7 @@
 				D1AF83352D65B21B002E0686 /* SettingsView.swift */,
 				D13A9D542D64935A0036E950 /* FileCenter */,
 				D1AA33C62D5E597B006219EC /* ContentView.swift */,
+				D11E32DF2D6D6E8A0040DF4F /* FileServerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -209,6 +216,7 @@
 			children = (
 				D1E3BBD32D61A942006D0B38 /* AudioFileManager.swift */,
 				D1AA33D02D5E59DE006219EC /* PhotoLibraryManager.swift */,
+				D11E32E12D6D6F2B0040DF4F /* FileServerManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -336,11 +344,13 @@
 				D1AA33D62D5E5AC3006219EC /* ModePicker.swift in Sources */,
 				D1AF83362D65B21B002E0686 /* SettingsView.swift in Sources */,
 				D1AA33B32D5D9D68006219EC /* MediaMasterApp.swift in Sources */,
+				D11E32E22D6D6F2B0040DF4F /* FileServerManager.swift in Sources */,
 				D1AA33CC2D5E597B006219EC /* ContentView.swift in Sources */,
 				D10BB3FB2D65D97600714E72 /* MinimizedAudioPlayer.swift in Sources */,
 				D13A9D512D6492500036E950 /* ImagePreviewView.swift in Sources */,
 				D1E3BBD42D61A942006D0B38 /* AudioFileManager.swift in Sources */,
 				D15C22A82D636D78004F741D /* Constants.swift in Sources */,
+				D11E32E02D6D6E8A0040DF4F /* FileServerView.swift in Sources */,
 				D13A9D532D6492F20036E950 /* FileRowView.swift in Sources */,
 				D1AA33DA2D5F6440006219EC /* AudioPlayerView.swift in Sources */,
 				D10BB3FF2D65FE4A00714E72 /* TimeUtil.swift in Sources */,
@@ -484,6 +494,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MediaMaster/MediaMaster.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MediaMaster/Preview Content\"";
@@ -493,6 +504,8 @@
 				INFOPLIST_FILE = MediaMaster/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "";
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "This app uses Face ID for secure authentication to protect your account and data";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "拼接保存视频";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "保存拼接视频";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -520,6 +533,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MediaMaster/MediaMaster.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MediaMaster/Preview Content\"";
@@ -529,6 +543,8 @@
 				INFOPLIST_FILE = MediaMaster/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "";
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "This app uses Face ID for secure authentication to protect your account and data";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "拼接保存视频";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "保存拼接视频";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

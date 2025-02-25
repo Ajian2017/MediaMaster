@@ -68,6 +68,10 @@ struct ContentView: View {
                 .tabItem {
                     Label("Settings", systemImage: "gear")
                 }
+
+            FileServerView().tabItem {
+                Label("wife传输", systemImage: "wifi.circle")
+            }
         }
     }
         
